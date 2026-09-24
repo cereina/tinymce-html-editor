@@ -1,0 +1,570 @@
+/* =========================================================
+   SOURCE CODE PRO
+   ========================================================= */
+
+
+.scp-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 23000;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 20px;
+
+  background:
+    rgba(0, 0, 0, 0.58);
+}
+
+
+.scp-modal {
+  width:
+    min(
+      1450px,
+      97vw
+    );
+
+  height:
+    min(
+      920px,
+      95vh
+    );
+
+  display: flex;
+  flex-direction: column;
+
+  overflow: hidden;
+
+  border:
+    1px solid #c8c8c8;
+
+  border-radius:
+    8px;
+
+  background:
+    #ffffff;
+
+  box-shadow:
+    0 22px 70px
+    rgba(
+      0,
+      0,
+      0,
+      0.35
+    );
+
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Arial,
+    sans-serif;
+}
+
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+
+.scp-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+
+  gap: 20px;
+
+  padding:
+    16px
+    20px;
+
+  border-bottom:
+    1px solid #d8d8d8;
+
+  background:
+    #f7f7f7;
+}
+
+
+.scp-header h1 {
+  margin: 0;
+
+  font-size:
+    1.35rem;
+
+  line-height:
+    1.25;
+}
+
+
+.scp-header p {
+  margin:
+    4px
+    0
+    0;
+
+  color:
+    #555555;
+
+  font-size:
+    0.9rem;
+}
+
+
+.scp-close {
+  width: 38px;
+  height: 38px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  flex:
+    0 0 auto;
+
+  padding: 0;
+
+  border: 0;
+
+  border-radius:
+    4px;
+
+  background:
+    transparent;
+
+  color:
+    #333333;
+
+  font-size:
+    28px;
+
+  line-height:
+    1;
+
+  cursor:
+    pointer;
+}
+
+
+.scp-close:hover,
+.scp-close:focus-visible {
+  background:
+    #e5e5e5;
+}
+
+
+/* =========================================================
+   TOOLBAR
+   ========================================================= */
+
+
+.scp-toolbar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+
+  gap:
+    10px
+    18px;
+
+  padding:
+    10px
+    14px;
+
+  border-bottom:
+    1px solid #d8d8d8;
+
+  background:
+    #ffffff;
+}
+
+
+.scp-toolbar-group {
+  display: flex;
+  align-items: center;
+
+  gap: 8px;
+}
+
+
+.scp-toolbar-group--grow {
+  flex:
+    1 1 auto;
+
+  justify-content:
+    flex-end;
+}
+
+
+.scp-tool-button,
+.scp-button {
+  min-height:
+    36px;
+
+  padding:
+    7px
+    12px;
+
+  border:
+    1px solid #a8a8a8;
+
+  border-radius:
+    4px;
+
+  background:
+    #ffffff;
+
+  color:
+    #222222;
+
+  font:
+    inherit;
+
+  font-weight:
+    600;
+
+  cursor:
+    pointer;
+}
+
+
+.scp-tool-button:hover,
+.scp-tool-button:focus-visible,
+.scp-button:hover,
+.scp-button:focus-visible {
+  background:
+    #f0f0f0;
+}
+
+
+.scp-tool-button:disabled,
+.scp-button:disabled {
+  opacity:
+    0.55;
+
+  cursor:
+    wait;
+}
+
+
+.scp-select-label {
+  display: flex;
+  align-items: center;
+
+  gap: 7px;
+
+  color:
+    #444444;
+
+  font-size:
+    0.9rem;
+
+  font-weight:
+    600;
+}
+
+
+.scp-select-label select {
+  min-height:
+    36px;
+
+  padding:
+    5px
+    30px
+    5px
+    8px;
+
+  border:
+    1px solid #aaa;
+
+  border-radius:
+    4px;
+
+  background:
+    #fff;
+
+  font:
+    inherit;
+}
+
+
+.scp-checkbox {
+  display: inline-flex;
+  align-items: center;
+
+  gap: 7px;
+
+  color:
+    #444;
+
+  font-size:
+    0.86rem;
+
+  cursor:
+    pointer;
+}
+
+
+.scp-checkbox input {
+  width:
+    16px;
+
+  height:
+    16px;
+}
+
+
+/* =========================================================
+   MESSAGE
+   ========================================================= */
+
+
+.scp-message {
+  min-height:
+    0;
+
+  padding:
+    0 14px;
+
+  overflow:
+    hidden;
+
+  font-size:
+    0.88rem;
+}
+
+
+.scp-message:not(:empty) {
+  padding:
+    8px
+    14px;
+
+  border-bottom:
+    1px solid #ddd;
+}
+
+
+.scp-message[data-type="success"] {
+  background:
+    #e9f5ec;
+
+  color:
+    #1f5130;
+}
+
+
+.scp-message[data-type="error"] {
+  background:
+    #f9dedc;
+
+  color:
+    #76231b;
+}
+
+
+.scp-message[data-type="info"] {
+  background:
+    #eef5ff;
+
+  color:
+    #284f75;
+}
+
+
+/* =========================================================
+   CODEMIRROR
+   ========================================================= */
+
+
+.scp-editor {
+  min-height: 0;
+
+  flex:
+    1 1 auto;
+
+  overflow:
+    hidden;
+
+  background:
+    #282c34;
+}
+
+
+.scp-editor .cm-editor {
+  height:
+    100%;
+}
+
+
+.scp-editor .cm-scroller {
+  overflow:
+    auto;
+
+  font-family:
+    "Cascadia Code",
+    "SFMono-Regular",
+    Consolas,
+    "Liberation Mono",
+    Menlo,
+    monospace;
+
+  font-size:
+    14px;
+
+  line-height:
+    1.55;
+}
+
+
+.scp-editor .cm-content {
+  min-height:
+    100%;
+}
+
+
+.scp-editor .cm-gutters {
+  user-select:
+    none;
+}
+
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+
+
+.scp-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 16px;
+
+  padding:
+    10px
+    14px;
+
+  border-top:
+    1px solid #d8d8d8;
+
+  background:
+    #f7f7f7;
+}
+
+
+.scp-status {
+  color:
+    #555555;
+
+  font-size:
+    0.85rem;
+
+  white-space:
+    nowrap;
+}
+
+
+.scp-footer-actions {
+  display: flex;
+  align-items: center;
+
+  gap: 8px;
+}
+
+
+.scp-shortcut {
+  margin-right:
+    8px;
+
+  color:
+    #666666;
+
+  font-size:
+    0.78rem;
+}
+
+
+.scp-button--primary {
+  border-color:
+    #26374a;
+
+  background:
+    #26374a;
+
+  color:
+    #ffffff;
+}
+
+
+.scp-button--primary:hover,
+.scp-button--primary:focus-visible {
+  background:
+    #172638;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+
+@media (
+  max-width: 850px
+) {
+
+  .scp-backdrop {
+    padding:
+      6px;
+  }
+
+
+  .scp-modal {
+    width:
+      100%;
+
+    height:
+      98vh;
+  }
+
+
+  .scp-toolbar {
+    align-items:
+      flex-start;
+  }
+
+
+  .scp-toolbar-group--grow {
+    width:
+      100%;
+
+    justify-content:
+      flex-start;
+  }
+
+
+  .scp-footer {
+    align-items:
+      flex-start;
+
+    flex-direction:
+      column;
+  }
+
+
+  .scp-footer-actions {
+    width:
+      100%;
+
+    flex-wrap:
+      wrap;
+  }
+
+
+  .scp-shortcut {
+    width:
+      100%;
+  }
+
+}

@@ -1,0 +1,712 @@
+/* =========================================================
+   TABLE WORKSTATION
+   ========================================================= */
+
+
+.table-workstation-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 22000;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 24px;
+
+  background: rgba(0, 0, 0, 0.5);
+}
+
+
+.table-workstation-modal {
+  width: min(1400px, 96vw);
+  height: min(900px, 94vh);
+
+  display: flex;
+  flex-direction: column;
+
+  overflow: hidden;
+
+  background: #fff;
+
+  border: 1px solid #c8c8c8;
+  border-radius: 8px;
+
+  box-shadow:
+    0 20px 60px
+    rgba(0, 0, 0, 0.3);
+
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Arial,
+    sans-serif;
+}
+
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+
+.table-workstation-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+
+  gap: 24px;
+
+  padding: 18px 22px;
+
+  border-bottom: 1px solid #d8d8d8;
+
+  background: #f7f7f7;
+}
+
+
+.table-workstation-header h1 {
+  margin: 0;
+
+  font-size: 1.4rem;
+  line-height: 1.25;
+}
+
+
+.table-workstation-header p {
+  margin:
+    4px
+    0
+    0;
+
+  color: #555;
+}
+
+
+.table-workstation-close {
+  width: 38px;
+  height: 38px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 0;
+  border-radius: 4px;
+
+  background: transparent;
+
+  font-size: 28px;
+  line-height: 1;
+
+  cursor: pointer;
+}
+
+
+.table-workstation-close:hover,
+.table-workstation-close:focus-visible {
+  background: #e7e7e7;
+}
+
+
+/* =========================================================
+   BODY
+   ========================================================= */
+
+
+.table-workstation-body {
+  min-height: 0;
+
+  flex: 1;
+
+  display: grid;
+
+  grid-template-columns:
+    minmax(230px, 290px)
+    minmax(0, 1fr);
+}
+
+
+/* =========================================================
+   SIDEBAR
+   ========================================================= */
+
+
+.table-workstation-sidebar {
+  min-height: 0;
+
+  overflow-y: auto;
+
+  border-right:
+    1px solid #ddd;
+
+  background: #f8f8f8;
+}
+
+
+.table-workstation-sidebar-heading {
+  padding:
+    16px
+    16px
+    8px;
+
+  font-weight: 700;
+}
+
+
+.table-workstation-nav-item {
+  width: 100%;
+
+  display: grid;
+
+  grid-template-columns:
+    28px
+    minmax(0, 1fr);
+
+  align-items: start;
+
+  gap: 8px;
+
+  padding:
+    11px
+    14px;
+
+  border: 0;
+  border-left:
+    4px solid transparent;
+
+  background:
+    transparent;
+
+  text-align: left;
+
+  cursor: pointer;
+}
+
+
+.table-workstation-nav-item:hover {
+  background: #ececec;
+}
+
+
+.table-workstation-nav-item.is-selected {
+  border-left-color: #26374a;
+
+  background: #e2e8f0;
+}
+
+
+.table-workstation-nav-item strong,
+.table-workstation-nav-item small {
+  display: block;
+}
+
+
+.table-workstation-nav-item small {
+  margin-top: 3px;
+
+  overflow: hidden;
+
+  color: #555;
+
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+
+.table-workstation-nav-icon {
+  font-size: 20px;
+}
+
+
+/* =========================================================
+   CONTENT
+   ========================================================= */
+
+
+.table-workstation-content {
+  min-width: 0;
+  min-height: 0;
+
+  overflow: auto;
+
+  padding: 24px;
+}
+
+
+.table-workstation-content h2 {
+  margin:
+    0
+    0
+    8px;
+
+  font-size: 1.55rem;
+}
+
+
+.table-workstation-content h3 {
+  margin:
+    28px
+    0
+    12px;
+
+  padding-bottom: 7px;
+
+  border-bottom:
+    1px solid #ddd;
+
+  font-size: 1.1rem;
+}
+
+
+.table-workstation-eyebrow {
+  margin-bottom: 4px;
+
+  color: #555;
+
+  font-size: 0.9rem;
+  font-weight: 700;
+
+  text-transform: uppercase;
+}
+
+
+/* =========================================================
+   DETAIL HEADING
+   ========================================================= */
+
+
+.table-workstation-detail-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+
+  gap: 24px;
+}
+
+
+/* =========================================================
+   BADGES / STATUS
+   ========================================================= */
+
+
+.table-workstation-badge {
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 6px;
+
+  padding:
+    6px
+    10px;
+
+  border-radius: 999px;
+
+  font-size: 0.88rem;
+  font-weight: 700;
+
+  white-space: nowrap;
+}
+
+
+.table-workstation-badge--pass {
+  background: #e9f5ec;
+}
+
+
+.table-workstation-badge--review {
+  background: #fff4ce;
+}
+
+
+.table-workstation-badge--error {
+  background: #f9dedc;
+}
+
+
+.table-workstation-status {
+  width: 24px;
+  height: 24px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  font-weight: 700;
+}
+
+
+.table-workstation-status--pass {
+  background: #e9f5ec;
+}
+
+
+.table-workstation-status--review {
+  background: #fff4ce;
+}
+
+
+.table-workstation-status--error {
+  background: #f9dedc;
+}
+
+
+/* =========================================================
+   ACTION BUTTONS
+   ========================================================= */
+
+
+.table-workstation-actions {
+  display: flex;
+  flex-wrap: wrap;
+
+  gap: 8px;
+
+  margin-top: 18px;
+}
+
+
+.table-workstation-actions button {
+  padding:
+    8px
+    13px;
+
+  border:
+    1px solid #aaa;
+
+  border-radius: 4px;
+
+  background: #fff;
+
+  font: inherit;
+
+  cursor: pointer;
+}
+
+
+.table-workstation-actions button:hover,
+.table-workstation-actions button:focus-visible {
+  background: #f1f1f1;
+}
+
+
+.table-workstation-actions
+.table-workstation-primary {
+  border-color: #26374a;
+
+  background: #26374a;
+
+  color: #fff;
+}
+
+
+.table-workstation-actions
+.table-workstation-primary:hover,
+.table-workstation-actions
+.table-workstation-primary:focus-visible {
+  background: #172638;
+}
+
+
+/* =========================================================
+   METRICS
+   ========================================================= */
+
+
+.table-workstation-metrics {
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      auto-fit,
+      minmax(170px, 1fr)
+    );
+
+  gap: 10px;
+}
+
+
+.table-workstation-metric {
+  min-height: 72px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  gap: 8px;
+
+  padding: 12px;
+
+  border:
+    1px solid #ddd;
+
+  border-radius: 5px;
+
+  background: #fafafa;
+}
+
+
+.table-workstation-metric span {
+  color: #555;
+
+  font-size: 0.88rem;
+}
+
+
+.table-workstation-metric strong {
+  font-size: 1.15rem;
+
+  text-transform: capitalize;
+}
+
+
+/* =========================================================
+   ISSUES
+   ========================================================= */
+
+
+.table-workstation-issues {
+  display: grid;
+
+  gap: 8px;
+}
+
+
+.table-workstation-issue {
+  width: 100%;
+
+  display: grid;
+
+  grid-template-columns:
+    30px
+    minmax(0, 1fr);
+
+  gap: 9px;
+
+  padding: 12px;
+
+  border:
+    1px solid #ddd;
+
+  border-left-width: 5px;
+
+  border-radius: 5px;
+
+  background: #fff;
+
+  text-align: left;
+
+  cursor: pointer;
+}
+
+
+.table-workstation-issue:hover,
+.table-workstation-issue:focus-visible {
+  background: #f8f8f8;
+}
+
+
+.table-workstation-issue--error {
+  border-left-color: #a62a1e;
+}
+
+
+.table-workstation-issue--warning {
+  border-left-color: #d6a300;
+}
+
+
+.table-workstation-issue--review {
+  border-left-color: #d6a300;
+}
+
+
+.table-workstation-issue strong,
+.table-workstation-issue span span {
+  display: block;
+}
+
+
+.table-workstation-issue span span {
+  margin-top: 3px;
+
+  color: #555;
+}
+
+
+.table-workstation-issue-symbol {
+  font-size: 18px;
+  font-weight: 700;
+}
+
+
+.table-workstation-pass-message {
+  padding: 14px;
+
+  border-radius: 5px;
+
+  background: #e9f5ec;
+}
+
+
+/* =========================================================
+   DOCUMENT REPORT
+   ========================================================= */
+
+
+.table-workstation-report-list {
+  display: grid;
+
+  gap: 8px;
+
+  margin-top: 24px;
+}
+
+
+.table-workstation-report-card {
+  display: grid;
+
+  grid-template-columns:
+    34px
+    minmax(0, 1fr);
+
+  align-items: center;
+
+  gap: 10px;
+
+  padding: 13px;
+
+  border:
+    1px solid #ddd;
+
+  border-radius: 5px;
+
+  background: #fff;
+
+  text-align: left;
+
+  cursor: pointer;
+}
+
+
+.table-workstation-report-card:hover,
+.table-workstation-report-card:focus-visible {
+  background: #f6f6f6;
+}
+
+
+.table-workstation-report-card-main strong,
+.table-workstation-report-card-main span {
+  display: block;
+}
+
+
+.table-workstation-report-card-main span {
+  margin-top: 4px;
+
+  color: #555;
+}
+
+
+/* =========================================================
+   PREVIEW
+   ========================================================= */
+
+
+.table-workstation-preview {
+  max-width: 100%;
+
+  overflow: auto;
+
+  padding: 14px;
+
+  border:
+    1px solid #ccc;
+
+  border-radius: 5px;
+
+  background: #fff;
+}
+
+
+.table-workstation-preview-table {
+  width: 100%;
+
+  border-collapse: collapse;
+}
+
+
+.table-workstation-preview-table caption {
+  margin-bottom: 8px;
+
+  font-weight: 700;
+
+  text-align: left;
+}
+
+
+.table-workstation-preview-table th,
+.table-workstation-preview-table td {
+  padding: 8px;
+
+  border:
+    1px solid #aaa;
+
+  vertical-align: top;
+}
+
+
+.table-workstation-preview-table th {
+  background: #f0f0f0;
+
+  font-weight: 700;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+
+@media (
+  max-width: 900px
+) {
+
+  .table-workstation-backdrop {
+    padding: 8px;
+  }
+
+
+  .table-workstation-modal {
+    width: 100%;
+    height: 96vh;
+  }
+
+
+  .table-workstation-body {
+    grid-template-columns: 1fr;
+  }
+
+
+  .table-workstation-sidebar {
+    max-height: 190px;
+
+    border-right: 0;
+    border-bottom:
+      1px solid #ddd;
+  }
+
+
+  .table-workstation-detail-heading {
+    display: block;
+  }
+
+
+  .table-workstation-badge {
+    margin-top: 8px;
+  }
+
+}
