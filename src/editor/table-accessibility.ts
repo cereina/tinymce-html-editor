@@ -2819,6 +2819,98 @@ function getComplexityLabel(
    ========================================================= */
 
 
+/* =========================================================
+   SAFE PREVIEW SANITIZATION
+   ========================================================= */
+
+
+const PREVIEW_BLOCKED_SELECTOR =
+  'script, style, iframe, object, embed, link, meta, base, ' +
+  'form, input, button, select, textarea, video, audio, ' +
+  'source, track, canvas, svg';
+
+
+const PREVIEW_URL_ATTRIBUTES =
+  new Set<string>([
+    'src',
+    'srcset',
+    'href',
+    'xlink:href',
+    'action',
+    'formaction',
+    'poster',
+    'data',
+    'ping',
+    'background',
+  ]);
+
+
+/**
+ * Preview content is copied from the
+ * editable document into the main app DOM.
+ *
+ * Strip active content, event handlers,
+ * inline CSS and URL-bearing attributes so
+ * a preview cannot execute code, submit a
+ * form, navigate, or load a remote resource.
+ */
+function sanitizePreviewClone(
+  root: HTMLElement
+): void {
+  root
+    .querySelectorAll(
+      PREVIEW_BLOCKED_SELECTOR
+    )
+    .forEach(
+      (element) => {
+        element.remove();
+      }
+    );
+
+
+  const elements: HTMLElement[] = [
+    root,
+    ...Array.from(
+      root.querySelectorAll<HTMLElement>(
+        '*'
+      )
+    ),
+  ];
+
+
+  elements.forEach(
+    (element) => {
+      Array.from(
+        element.attributes
+      ).forEach(
+        (attribute) => {
+          const name =
+            attribute.name
+              .toLowerCase();
+
+
+          if (
+            name.startsWith(
+              'on'
+            ) ||
+            name ===
+              'style' ||
+            PREVIEW_URL_ATTRIBUTES
+              .has(
+                name
+              )
+          ) {
+            element.removeAttribute(
+              attribute.name
+            );
+          }
+        }
+      );
+    }
+  );
+}
+
+
 function createPreviewTable(
   table: HTMLTableElement
 ): HTMLTableElement {
@@ -2826,6 +2918,11 @@ function createPreviewTable(
     table.cloneNode(
       true
     ) as HTMLTableElement;
+
+
+  sanitizePreviewClone(
+    preview
+  );
 
 
   /*
