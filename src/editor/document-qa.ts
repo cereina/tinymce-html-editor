@@ -1577,9 +1577,16 @@ function goToIssue(
     target
   );
 
-  editor.dom.scrollIntoView(
-    target
-  );
+  target.scrollIntoView({
+    behavior:
+      'smooth',
+
+    block:
+      'center',
+
+    inline:
+      'nearest',
+  });
 
   editor.nodeChanged();
 }
