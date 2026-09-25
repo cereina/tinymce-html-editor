@@ -1732,8 +1732,6 @@ export function reviewImportedFootnotes(
                 language
               );
 
-            api.close();
-
             finish({
               html:
                 conversion.html,
@@ -1755,6 +1753,8 @@ export function reviewImportedFootnotes(
               warnings:
                 conversion.warnings,
             });
+
+            api.close();
           },
 
         onCancel:
