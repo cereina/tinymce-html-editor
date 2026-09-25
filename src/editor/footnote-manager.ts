@@ -1453,21 +1453,43 @@ export function convertImportedFootnotesToWet(
       );
 
 
-      const parentList =
-        definition.parentElement;
-
-      if (
-        parentList &&
-        parentList.tagName ===
-          'OL'
-      ) {
-        sourceContainers.add(
-          parentList as
-            HTMLOListElement
+      const matchingDefinitions =
+        Array.from(
+          document.querySelectorAll<
+            HTMLLIElement
+          >(
+            'li[id]'
+          )
+        ).filter(
+          (
+            item
+          ) =>
+            item.id ===
+            group.targetId
         );
-      }
 
-      definition.remove();
+
+      matchingDefinitions.forEach(
+        (
+          item
+        ) => {
+          const parentList =
+            item.parentElement;
+
+          if (
+            parentList &&
+            parentList.tagName ===
+              'OL'
+          ) {
+            sourceContainers.add(
+              parentList as
+                HTMLOListElement
+            );
+          }
+
+          item.remove();
+        }
+      );
     }
   );
 
