@@ -210,6 +210,41 @@ function isInsideExcludedContainer(
  * Determine whether a heading can be
  * processed by the section builder.
  */
+/**
+ * WET-BOEW footnotes are a document-level
+ * semantic block.
+ *
+ * When heading sections are rebuilt, the
+ * complete footnote ASIDE must not be
+ * absorbed into the currently open
+ * generated heading section.
+ */
+function isWetFootnoteAside(
+  node:
+    Node
+): boolean {
+  if (
+    node.nodeType !==
+    1
+  ) {
+    return false;
+  }
+
+
+  const element =
+    node as HTMLElement;
+
+
+  return (
+    element.tagName ===
+      'ASIDE' &&
+    element.classList.contains(
+      'wb-fnote'
+    )
+  );
+}
+
+
 function isHeadingEligible(
   heading:
     HTMLHeadingElement
@@ -633,12 +668,45 @@ function buildSectionsInContainer(
       node
     ) => {
       /*
+       * WET-BOEW footnotes are a
+       * document-level boundary.
+       *
+       * Close the generated heading
+       * hierarchy before appending the
+       * complete footnote ASIDE. This
+       * keeps:
+       *
+       * <aside class="wb-fnote">
+       *
+       * outside generated heading
+       * sections while leaving ordinary
+       * ASIDE elements unchanged.
+       */
+      if (
+        isWetFootnoteAside(
+          node
+        )
+      ) {
+        stack.length =
+          0;
+
+
+        fragment.appendChild(
+          node
+        );
+
+
+        return;
+      }
+
+
+      /*
        * Normal content.
        *
        * This includes:
        *
        * <nav>
-       * <aside>
+       * ordinary <aside>
        * <table>
        *
        * These elements can be moved as
