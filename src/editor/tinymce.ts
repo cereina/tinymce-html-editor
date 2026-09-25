@@ -45,6 +45,10 @@ import {
   registerDocumentQaButton,
 } from './document-qa';
 
+import {
+  registerDownloadLinkButton,
+} from './download-link';
+
 
 // TinyMCE core
 import 'tinymce/icons/default/icons.min.js';
@@ -943,7 +947,7 @@ RawEditorOptions = {
         'Document tools',
 
       items:
-        'importword cleanhtml documentqa',
+        'importword cleanhtml documentqa downloadlink',
     },
 
     structuretools: {
@@ -1018,6 +1022,11 @@ RawEditorOptions = {
 
 
       registerDocumentQaButton(
+        editor
+      );
+
+
+      registerDownloadLinkButton(
         editor
       );
 
