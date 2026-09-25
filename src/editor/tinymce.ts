@@ -926,15 +926,66 @@ RawEditorOptions = {
   ],
 
 
+  toolbar_mode:
+    'floating',
+
+
+  toolbar_groups: {
+    documenttools: {
+      text:
+        'Document',
+
+      tooltip:
+        'Document tools',
+
+      items:
+        'importword cleanhtml',
+    },
+
+    structuretools: {
+      text:
+        'Structure',
+
+      tooltip:
+        'Document structure tools',
+
+      items:
+        'sections tocmanager footnotes wetstyles',
+    },
+
+    accessibilitytools: {
+      text:
+        'Accessibility',
+
+      tooltip:
+        'Accessibility tools',
+
+      items:
+        'tableworkstation tableaccessibility',
+    },
+
+    codetools: {
+      text:
+        'Code',
+
+      tooltip:
+        'HTML source tools',
+
+      items:
+        'sourcecodepro code',
+    },
+  },
+
+
   toolbar:
     'undo redo | ' +
-    'importword cleanhtml sections tocmanager footnotes wetstyles tableworkstation tableaccessibility sourcecodepro | ' +
+    'documenttools structuretools accessibilitytools codetools | ' +
     'blocks | ' +
     'bold italic | ' +
     'bullist numlist | ' +
     'link table | ' +
     'searchreplace visualblocks | ' +
-    'code fullscreen',
+    'fullscreen',
 
 
   menubar:
