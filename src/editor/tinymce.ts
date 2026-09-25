@@ -36,6 +36,11 @@ import {
   registerWetStyleManagerMenu,
 } from '../wet/wet-style-manager';
 
+import {
+  registerFootnoteManagerMenu,
+  reviewImportedFootnotes,
+} from './footnote-manager';
+
 
 // TinyMCE core
 import 'tinymce/icons/default/icons.min.js';
@@ -605,27 +610,73 @@ function registerWordImportButton(
                   );
 
 
+                const footnoteReview =
+                  await reviewImportedFootnotes(
+                    editor,
+                    result.html
+                  );
+
+
                 editor.undoManager.transact(
                   () => {
                     editor.setContent(
-                      result.html
+                      footnoteReview.html
                     );
                   }
                 );
+
+
+                const importMessage =
+                  footnoteReview.converted
+                    ? `Imported "${file.name}" successfully. ${footnoteReview.convertedFootnotes} footnote(s) converted to WET-BOEW.`
+                    : footnoteReview.detectedFootnotes >
+                      0
+                      ? `Imported "${file.name}" successfully. Word footnotes were kept in their imported format.`
+                      : `Imported "${file.name}" successfully.`;
 
 
                 editor
                   .notificationManager
                   .open({
                     text:
-                      `Imported "${file.name}" successfully.`,
+                      importMessage,
 
                     type:
-                      'success',
+                      footnoteReview.warnings.length >
+                      0
+                        ? 'warning'
+                        : 'success',
 
                     timeout:
-                      3000,
+                      footnoteReview.warnings.length >
+                      0
+                        ? 6500
+                        : 3500,
                   });
+
+
+                if (
+                  footnoteReview.warnings.length >
+                  0
+                ) {
+                  console.group(
+                    'Footnote conversion messages'
+                  );
+
+
+                  footnoteReview.warnings.forEach(
+                    (
+                      warning
+                    ) => {
+                      console.warn(
+                        warning
+                      );
+                    }
+                  );
+
+
+                  console.groupEnd();
+                }
 
 
                 if (
@@ -877,7 +928,7 @@ RawEditorOptions = {
 
   toolbar:
     'undo redo | ' +
-    'importword cleanhtml sections tocmanager wetstyles tableworkstation tableaccessibility sourcecodepro | ' +
+    'importword cleanhtml sections tocmanager footnotes wetstyles tableworkstation tableaccessibility sourcecodepro | ' +
     'blocks | ' +
     'bold italic | ' +
     'bullist numlist | ' +
@@ -917,6 +968,11 @@ RawEditorOptions = {
 
 
       registerTableOfContentsMenu(
+        editor
+      );
+
+
+      registerFootnoteManagerMenu(
         editor
       );
 
