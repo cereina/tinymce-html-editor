@@ -41,6 +41,10 @@ import {
   reviewImportedFootnotes,
 } from './footnote-manager';
 
+import {
+  registerDocumentQaButton,
+} from './document-qa';
+
 
 // TinyMCE core
 import 'tinymce/icons/default/icons.min.js';
@@ -939,7 +943,7 @@ RawEditorOptions = {
         'Document tools',
 
       items:
-        'importword cleanhtml',
+        'importword cleanhtml documentqa',
     },
 
     structuretools: {
@@ -1009,6 +1013,11 @@ RawEditorOptions = {
 
 
       registerCleanHtmlButton(
+        editor
+      );
+
+
+      registerDocumentQaButton(
         editor
       );
 
