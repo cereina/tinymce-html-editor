@@ -21,6 +21,10 @@ import {
 } from './table-accessibility';
 
 import {
+  registerLeftRowHeadersButton,
+} from './left-row-headers';
+
+import {
   registerTableWorkstationMenu,
 } from './table-workstation';
 
@@ -969,7 +973,7 @@ RawEditorOptions = {
         'Accessibility tools',
 
       items:
-        'tableworkstation tableaccessibility',
+        'tableworkstation tableaccessibility leftrowheaders',
     },
 
     codetools: {
@@ -1066,6 +1070,11 @@ RawEditorOptions = {
        * reviewer.
        */
       registerTableAccessibilityButton(
+        editor
+      );
+
+
+      registerLeftRowHeadersButton(
         editor
       );
 
