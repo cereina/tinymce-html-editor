@@ -65,31 +65,6 @@ interface ApplyResult {
    ========================================================= */
 
 
-function normalizeText(
-  value:
-    string
-): string {
-  return value
-    .replace(
-      /\u00a0/g,
-      ' '
-    )
-    .replace(
-      /\u200B/g,
-      ''
-    )
-    .replace(
-      /\uFEFF/g,
-      ''
-    )
-    .replace(
-      /\s+/g,
-      ' '
-    )
-    .trim();
-}
-
-
 function getSelectedTable(
   editor:
     Editor
