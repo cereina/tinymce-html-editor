@@ -725,75 +725,43 @@ function createElementReport(
           : ''
       }
 
-      <table>
+      <dl class="tool-report-data">
 
-        <tr>
-          <td>
+        <div class="tool-report-row"><dt>
             HTML element
-          </td>
-
-          <td
-            style="
-              padding-left: 20px;
-            "
-          >
+          </dt><dd>
             <strong>
               &lt;${escapeHtml(
                 tagName
               )}&gt;
             </strong>
-          </td>
-        </tr>
+          </dd></div>
 
-        <tr>
-          <td>
+        <div class="tool-report-row"><dt>
             Existing classes
-          </td>
-
-          <td
-            style="
-              padding-left: 20px;
-            "
-          >
+          </dt><dd>
             <strong>
               ${existingClasses.length}
             </strong>
-          </td>
-        </tr>
+          </dd></div>
 
-        <tr>
-          <td>
+        <div class="tool-report-row"><dt>
             Verified WET / GCWeb classes
-          </td>
-
-          <td
-            style="
-              padding-left: 20px;
-            "
-          >
+          </dt><dd>
             <strong>
               ${verifiedCount}
             </strong>
-          </td>
-        </tr>
+          </dd></div>
 
-        <tr>
-          <td>
+        <div class="tool-report-row"><dt>
             Other / custom classes
-          </td>
-
-          <td
-            style="
-              padding-left: 20px;
-            "
-          >
+          </dt><dd>
             <strong>
               ${customCount}
             </strong>
-          </td>
-        </tr>
+          </dd></div>
 
-      </table>
+      </dl>
 
       ${outOfContextHtml}
 

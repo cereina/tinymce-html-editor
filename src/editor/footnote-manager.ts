@@ -1548,14 +1548,14 @@ function createImportReviewHtml(
         footnotes +
         ' Word footnote(s) detected.</strong></p>' +
       '<p>The imported Word/Mammoth footnote markup can be converted to the WET-BOEW <code>wb-fnote</code> pattern before it is placed in the editor.</p>' +
-      '<table>' +
-        '<tr><td>Footnote definitions</td><td style="padding-left:20px"><strong>' +
+      '<dl class="tool-report-data">' +
+        '<div class="tool-report-row"><dt>Footnote definitions</dt><dd><strong>' +
           footnotes +
-        '</strong></td></tr>' +
-        '<tr><td>Footnote references</td><td style="padding-left:20px"><strong>' +
+        '</strong></dd></div>' +
+        '<div class="tool-report-row"><dt>Footnote references</dt><dd><strong>' +
           references +
-        '</strong></td></tr>' +
-      '</table>' +
+        '</strong></dd></div>' +
+      '</dl>' +
       '<p style="margin-top:14px">Choose the language used for the accessible footnote labels.</p>' +
     '</div>'
   );
@@ -1848,45 +1848,45 @@ function createManagerReport(
   return (
     '<div>' +
       '<h3 style="margin-top:0">Imported Word footnotes</h3>' +
-      '<table>' +
-        '<tr><td>References</td><td style="padding-left:20px"><strong>' +
+      '<dl class="tool-report-data">' +
+        '<div class="tool-report-row"><dt>References</dt><dd><strong>' +
           analysis.importedReferences +
-        '</strong></td></tr>' +
-        '<tr><td>Definitions</td><td style="padding-left:20px"><strong>' +
+        '</strong></dd></div>' +
+        '<div class="tool-report-row"><dt>Definitions</dt><dd><strong>' +
           analysis.importedDefinitions +
-        '</strong></td></tr>' +
-      '</table>' +
+        '</strong></dd></div>' +
+      '</dl>' +
 
       '<h3>WET-BOEW footnotes</h3>' +
-      '<table>' +
-        '<tr><td>Footnote sections</td><td style="padding-left:20px"><strong>' +
+      '<dl class="tool-report-data">' +
+        '<div class="tool-report-row"><dt>Footnote sections</dt><dd><strong>' +
           analysis.wetSections +
-        '</strong></td></tr>' +
-        '<tr><td>References</td><td style="padding-left:20px"><strong>' +
+        '</strong></dd></div>' +
+        '<div class="tool-report-row"><dt>References</dt><dd><strong>' +
           analysis.wetReferences +
-        '</strong></td></tr>' +
-        '<tr><td>Definitions</td><td style="padding-left:20px"><strong>' +
+        '</strong></dd></div>' +
+        '<div class="tool-report-row"><dt>Definitions</dt><dd><strong>' +
           analysis.wetDefinitions +
-        '</strong></td></tr>' +
-        '<tr><td>Invalid reference markup</td><td style="padding-left:20px"><strong>' +
+        '</strong></dd></div>' +
+        '<div class="tool-report-row"><dt>Invalid reference markup</dt><dd><strong>' +
           analysis.invalidWetReferences +
-        '</strong></td></tr>' +
-        '<tr><td>Broken reference targets</td><td style="padding-left:20px"><strong>' +
+        '</strong></dd></div>' +
+        '<div class="tool-report-row"><dt>Broken reference targets</dt><dd><strong>' +
           analysis.brokenReferenceTargets.length +
-        '</strong></td></tr>' +
-        '<tr><td>Broken return links</td><td style="padding-left:20px"><strong>' +
+        '</strong></dd></div>' +
+        '<div class="tool-report-row"><dt>Broken return links</dt><dd><strong>' +
           analysis.brokenReturnLinks.length +
-        '</strong></td></tr>' +
-        '<tr><td>Missing return links</td><td style="padding-left:20px"><strong>' +
+        '</strong></dd></div>' +
+        '<div class="tool-report-row"><dt>Missing return links</dt><dd><strong>' +
           analysis.missingReturnLinks.length +
-        '</strong></td></tr>' +
-        '<tr><td>Unreferenced definitions</td><td style="padding-left:20px"><strong>' +
+        '</strong></dd></div>' +
+        '<div class="tool-report-row"><dt>Unreferenced definitions</dt><dd><strong>' +
           analysis.orphanDefinitions.length +
-        '</strong></td></tr>' +
-        '<tr><td>Duplicate IDs</td><td style="padding-left:20px"><strong>' +
+        '</strong></dd></div>' +
+        '<div class="tool-report-row"><dt>Duplicate IDs</dt><dd><strong>' +
           analysis.duplicateIds.length +
-        '</strong></td></tr>' +
-      '</table>' +
+        '</strong></dd></div>' +
+      '</dl>' +
 
       warningsHtml +
     '</div>'

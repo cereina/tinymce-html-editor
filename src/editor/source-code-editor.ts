@@ -444,9 +444,9 @@ export function openSourceCodeEditor(
 
         <div>
 
-          <h1 id="scp-title">
+          <h2 id="scp-title">
             Source Code Pro
-          </h1>
+          </h2>
 
           <p>
             Edit and format the HTML source.

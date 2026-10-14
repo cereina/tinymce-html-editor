@@ -1418,11 +1418,11 @@ function createCategoryHtml(
   return (
     '<section class="document-qa-section">' +
       '<div class="document-qa-section-heading">' +
-        '<h2>' +
+        '<h3>' +
           escapeHtml(
             category
           ) +
-        '</h2>' +
+        '</h3>' +
         '<span>' +
           issues.length +
           (
@@ -1462,13 +1462,13 @@ function createReportHtml(
     '<div class="document-qa-summary">' +
       '<div>' +
         '<div class="document-qa-eyebrow">Pre-publish document check</div>' +
-        '<h2>' +
+        '<h3>' +
           escapeHtml(
             getOverallLabel(
               report
             )
           ) +
-        '</h2>' +
+        '</h3>' +
         '<p>This report is advisory. Automated checks cannot prove that a page is fully accessible or publication-ready.</p>' +
       '</div>' +
       '<span class="document-qa-badge document-qa-badge--' +
@@ -1653,7 +1653,7 @@ function openDocumentQa(
 
   header.innerHTML =
     '<div>' +
-      '<h1 id="document-qa-title">Document QA</h1>' +
+      '<h2 id="document-qa-title">Document QA</h2>' +
       '<p>Review structure, links, accessibility indicators, footnotes, and HTML quality before publishing.</p>' +
     '</div>';
 

@@ -60,7 +60,7 @@
 }
 
 
-.document-qa-header h1 {
+.document-qa-header h2 {
   margin: 0;
 
   font-size: 1.4rem;
@@ -129,7 +129,7 @@
 }
 
 
-.document-qa-summary h2 {
+.document-qa-summary h3 {
   margin:
     3px
     0
@@ -299,7 +299,7 @@
 }
 
 
-.document-qa-section-heading h2 {
+.document-qa-section-heading h3 {
   margin: 0;
 
   font-size: 1.15rem;

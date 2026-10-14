@@ -19,6 +19,24 @@ async function audit(page) {
     return r.violations.map(v => ({ id: v.id, targets: v.nodes.map(n => n.target) }));
   });
   expect(violations).toEqual([]);
+  const windows = page.getByRole('dialog');
+  for (let index = 0; index < await windows.count(); index++) {
+    const structure = await windows.nth(index).evaluate(dialog => {
+      const headings = Array.from(dialog.querySelectorAll('h1,h2,h3,h4,h5,h6'))
+        .filter(heading => !heading.closest('.table-workstation-preview,.table-a11y-table-preview'))
+        .map(heading => ({ level: Number(heading.tagName.slice(1)), text: heading.textContent.trim() }));
+      const reportTables = Array.from(dialog.querySelectorAll('table'))
+        .filter(table => !table.closest('.table-workstation-preview,.table-a11y-table-preview'));
+      return { headings, reportTables: reportTables.length };
+    });
+    expect(structure.headings[0]?.level).toBe(2);
+    expect(structure.headings.every(heading => heading.text.length > 0)).toBeTruthy();
+    for (let position = 1; position < structure.headings.length; position++) {
+      expect(structure.headings[position].level).toBeGreaterThanOrEqual(3);
+      expect(structure.headings[position].level).toBeLessThanOrEqual(structure.headings[position-1].level + 1);
+    }
+    expect(structure.reportTables).toBe(0);
+  }
 }
 async function openComplex(page) {
   await ready(page, complex); await action(page, 'tableaccessibility');
@@ -173,4 +191,16 @@ test('Keyboard target sizes and focus indicator for table cells',async({page})=>
   await openComplex(page);const button=page.locator('.table-a11y-cell-button').first();await page.keyboard.press('Tab');await button.focus();
   const dimensions=await button.evaluate(el=>{const r=el.getBoundingClientRect(),s=getComputedStyle(el);return {width:r.width,height:r.height,outlineWidth:parseFloat(s.outlineWidth),outlineStyle:s.outlineStyle};});
   expect(dimensions.width).toBeGreaterThanOrEqual(24);expect(dimensions.height).toBeGreaterThanOrEqual(24);expect(dimensions.outlineWidth).toBeGreaterThanOrEqual(2);expect(dimensions.outlineStyle).not.toBe('none');
+});
+
+test('Long report content can be scrolled with the keyboard',async({page})=>{
+  await ready(page);await action(page,'footnotes');await page.setViewportSize({width:320,height:800});
+  const content=page.locator('.tox-dialog__body-content');await content.focus();await page.keyboard.press('PageDown');
+  await expect.poll(()=>content.evaluate(el=>el.scrollTop)).toBeGreaterThan(0);await audit(page);
+});
+test('Popup heading IDs still provide the accessible window name',async({page})=>{
+  await ready(page);await action(page,'downloadlink');
+  await expect(page.getByRole('dialog',{name:'Insert Download Link',exact:true})).toBeVisible();
+  await expect(page.getByRole('heading',{level:2,name:'Insert Download Link',exact:true})).toBeVisible();
+  expect(await page.locator('main > h1').textContent()).toContain('HTML Editor');
 });

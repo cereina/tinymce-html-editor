@@ -23,9 +23,14 @@ export function openAccessibleModal(dialog: HTMLDialogElement, editor: Editor, c
       const controls = Array.from(dialog.querySelectorAll<HTMLElement>(
         'button:not([disabled]),input:not([disabled]),select:not([disabled]),textarea:not([disabled]),a[href],[tabindex="0"],[contenteditable="true"]'
       )).filter(el => el.getClientRects().length && !el.closest('[hidden]'));
-      const first = controls[0], last = controls.at(-1);
-      if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last?.focus(); }
-      else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first?.focus(); }
+      if (controls.length) {
+        const current = controls.indexOf(document.activeElement as HTMLElement);
+        const next = current < 0
+          ? (event.shiftKey ? controls.length - 1 : 0)
+          : (current + (event.shiftKey ? -1 : 1) + controls.length) % controls.length;
+        event.preventDefault();
+        controls[next].focus();
+      }
     }
   }, true);
   const restore = () => {
@@ -65,6 +70,30 @@ export function registerAccessibleToolLabels(editor: Editor): void {
 
 export function installEditorAccessibility(editor: Editor): void {
   editor.iframeElement?.setAttribute('title', 'Document HTML editor');
+  // Silver owns its title markup. Preserve its IDs, classes and ARIA references
+  // while adjusting only the app window heading, never authored iframe content.
+  const updateTitles = () => {
+    document.querySelectorAll<HTMLHeadingElement>('.tox-dialog h1.tox-dialog__title').forEach(title => {
+      const heading = document.createElement('h2');
+      Array.from(title.attributes).forEach(attribute => heading.setAttribute(attribute.name, attribute.value));
+      heading.append(...Array.from(title.childNodes));
+      title.replaceWith(heading);
+    });
+  };
+  const updateWindowStructure = () => {
+    updateTitles();
+    document.querySelectorAll<HTMLElement>('.tox-dialog__body-content').forEach(body => {
+      body.tabIndex = 0;
+      body.setAttribute('data-alloy-tabstop', 'true');
+      body.setAttribute('role', 'region');
+      const title = body.closest('.tox-dialog')?.querySelector('.tox-dialog__title')?.textContent?.trim();
+      body.setAttribute('aria-label', (title || 'Dialog') + ' contents');
+    });
+  };
+  const titleObserver = new MutationObserver(updateWindowStructure);
+  titleObserver.observe(document.body, { childList: true, subtree: true });
+  editor.on('OpenWindow', updateWindowStructure);
+  editor.on('remove', () => { titleObserver.disconnect(); editor.off('OpenWindow', updateWindowStructure); });
   const originalOpen = editor.windowManager.open.bind(editor.windowManager);
   const labelItems = (items: Ui.Dialog.BodyComponentSpec[], title: string): Ui.Dialog.BodyComponentSpec[] =>
     items.map(item => {

@@ -4330,18 +4330,11 @@ function createAnalysisHtml(
         Table analysis
       </h3>
 
-      <table>
+      <dl class="tool-report-data">
 
-        <tr>
-          <td>
+        <div class="tool-report-row"><dt>
             Classification
-          </td>
-
-          <td
-            style="
-              padding-left: 20px;
-            "
-          >
+          </dt><dd>
             <strong>
               ${escapeHtml(
                 getComplexityLabel(
@@ -4349,90 +4342,49 @@ function createAnalysisHtml(
                 )
               )}
             </strong>
-          </td>
-        </tr>
+          </dd></div>
 
-        <tr>
-          <td>
+        <div class="tool-report-row"><dt>
             Rows
-          </td>
-
-          <td
-            style="
-              padding-left: 20px;
-            "
-          >
+          </dt><dd>
             <strong>
               ${analysis.rows}
             </strong>
-          </td>
-        </tr>
+          </dd></div>
 
-        <tr>
-          <td>
+        <div class="tool-report-row"><dt>
             Columns
-          </td>
-
-          <td
-            style="
-              padding-left: 20px;
-            "
-          >
+          </dt><dd>
             <strong>
               ${analysis.columns}
             </strong>
-          </td>
-        </tr>
+          </dd></div>
 
-        <tr>
-          <td>
+        <div class="tool-report-row"><dt>
             Existing TH cells
-          </td>
-
-          <td
-            style="
-              padding-left: 20px;
-            "
-          >
+          </dt><dd>
             <strong>
               ${analysis.headerCells}
             </strong>
-          </td>
-        </tr>
+          </dd></div>
 
-        <tr>
-          <td>
+        <div class="tool-report-row"><dt>
             Merged cells
-          </td>
-
-          <td
-            style="
-              padding-left: 20px;
-            "
-          >
+          </dt><dd>
             <strong>
               ${analysis.mergedCells}
             </strong>
-          </td>
-        </tr>
+          </dd></div>
 
-        <tr>
-          <td>
+        <div class="tool-report-row"><dt>
             Safe paragraph wrappers
-          </td>
-
-          <td
-            style="
-              padding-left: 20px;
-            "
-          >
+          </dt><dd>
             <strong>
               ${analysis.safeParagraphWrappers}
             </strong>
-          </td>
-        </tr>
+          </dd></div>
 
-      </table>
+      </dl>
 
 
       ${suggestedHeaders}

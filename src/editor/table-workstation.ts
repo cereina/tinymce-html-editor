@@ -2219,9 +2219,9 @@ function createDocumentSummaryHtml(
   return `
     <div class="table-workstation-document">
 
-      <h2>
+      <h3>
         Document Table Report
-      </h2>
+      </h3>
 
       <p>
         This is an automated structural
@@ -2421,11 +2421,11 @@ function createTableDetailHtml(
             Table ${report.index + 1}
           </div>
 
-          <h2>
+          <h3>
             ${escapeHtml(
               report.label
             )}
-          </h2>
+          </h3>
 
         </div>
 
@@ -2484,9 +2484,9 @@ function createTableDetailHtml(
       </div>
 
 
-      <h3>
+      <h4>
         Structure
-      </h3>
+      </h4>
 
       <div class="table-workstation-metrics">
 
@@ -2553,9 +2553,9 @@ function createTableDetailHtml(
       </div>
 
 
-      <h3>
+      <h4>
         Accessibility relationships
-      </h3>
+      </h4>
 
       <div class="table-workstation-metrics">
 
@@ -2602,18 +2602,18 @@ function createTableDetailHtml(
       </div>
 
 
-      <h3>
+      <h4>
         Findings
-      </h3>
+      </h4>
 
       <div class="table-workstation-issues">
         ${issueHtml}
       </div>
 
 
-      <h3>
+      <h4>
         Table preview
-      </h3>
+      </h4>
 
       <div data-preview-container></div>
 
@@ -2853,9 +2853,9 @@ function openTableWorkstation(
 
         <div>
 
-          <h1 id="table-workstation-title">
+          <h2 id="table-workstation-title">
             Table Workstation
-          </h1>
+          </h2>
 
           <p>
             Review every table in the

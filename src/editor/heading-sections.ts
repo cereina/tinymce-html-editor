@@ -1271,26 +1271,16 @@ function createBuildReport(
         (
           level
         ) => `
-          <tr>
-            <td>
+          <div class="tool-report-row"><dt>
               H${level}
-            </td>
-
-            <td
-              style="
-                padding-left: 24px;
-                text-align: right;
-                font-weight: 700;
-              "
-            >
+            </dt><dd>
               ${
                 analysis
                   .headingCounts[
                     level
                   ]
               }
-            </td>
-          </tr>
+            </dd></div>
         `
       )
       .join(
@@ -1470,62 +1460,32 @@ function createBuildReport(
         wrappers.
       </p>
 
-      <table>
+      <dl class="tool-report-data">
 
-        <tr>
-          <td>
+        <div class="tool-report-row"><dt>
             Eligible headings
-          </td>
-
-          <td
-            style="
-              padding-left: 24px;
-              text-align: right;
-              font-weight: 700;
-            "
-          >
+          </dt><dd>
             ${analysis.totalHeadings}
-          </td>
-        </tr>
+          </dd></div>
 
         ${headingRows}
 
-        <tr>
-          <td>
+        <div class="tool-report-row"><dt>
             Existing generated sections
-          </td>
-
-          <td
-            style="
-              padding-left: 24px;
-              text-align: right;
-              font-weight: 700;
-            "
-          >
+          </dt><dd>
             ${
               analysis
                 .existingGeneratedSections
             }
-          </td>
-        </tr>
+          </dd></div>
 
-        <tr>
-          <td>
+        <div class="tool-report-row"><dt>
             Manual sections preserved
-          </td>
-
-          <td
-            style="
-              padding-left: 24px;
-              text-align: right;
-              font-weight: 700;
-            "
-          >
+          </dt><dd>
             ${analysis.manualSections}
-          </td>
-        </tr>
+          </dd></div>
 
-      </table>
+      </dl>
 
       ${excludedHtml}
 

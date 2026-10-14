@@ -29,3 +29,9 @@ dialog.accessible-modal::backdrop { background: transparent; }
   .accessible-modal :is(.table-workstation-body,.table-a11y-review-body) { min-height: 16rem; }
 }
 .scp-editor .cm-gutterElement { color: #bfc7d5; }
+
+.tool-report-data { margin: 1rem 0; }
+.tool-report-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: .5rem 1.5rem; padding-block: .3rem; }
+.tool-report-row dt { overflow-wrap: anywhere; }
+.tool-report-row dd { margin: 0; font-weight: 700; }
+@media (max-width: 400px) { .tool-report-row { grid-template-columns: 1fr; gap: .25rem; } }

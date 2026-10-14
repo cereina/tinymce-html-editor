@@ -234,28 +234,13 @@ function createCleanupReport(
         (
           [label, count]
         ) => `
-          <tr>
-            <td
-              style="
-                padding:
-                  6px 24px 6px 0;
-              "
-            >
+          <div class="tool-report-row"><dt>
               ${escapeHtml(
                 label
               )}
-            </td>
-
-            <td
-              style="
-                padding: 6px;
-                font-weight: 700;
-                text-align: right;
-              "
-            >
+            </dt><dd>
               ${count}
-            </td>
-          </tr>
+            </dd></div>
         `
       )
       .join(
@@ -327,212 +312,124 @@ function createCleanupReport(
         Internal references
       </h3>
 
-      <table>
+      <dl class="tool-report-data">
 
-        <tr>
-          <td>
+        <div class="tool-report-row"><dt>
             Internal links
-          </td>
-
-          <td
-            style="
-              padding-left: 20px;
-            "
-          >
+          </dt><dd>
             <strong>
               ${stats.internalLinks}
             </strong>
-          </td>
-        </tr>
+          </dd></div>
 
-        <tr>
-          <td>
+        <div class="tool-report-row"><dt>
             Referenced IDs protected
-          </td>
-
-          <td
-            style="
-              padding-left: 20px;
-            "
-          >
+          </dt><dd>
             <strong>
               ${stats.referencedIdsProtected}
             </strong>
-          </td>
-        </tr>
+          </dd></div>
 
-        <tr>
-          <td>
+        <div class="tool-report-row"><dt>
             Broken internal links
-          </td>
-
-          <td
-            style="
-              padding-left: 20px;
-            "
-          >
+          </dt><dd>
             <strong>
               ${stats.brokenInternalLinks}
             </strong>
-          </td>
-        </tr>
+          </dd></div>
 
-      </table>
+      </dl>
 
 
       <h3>
         Footnotes / endnotes
       </h3>
 
-      <table>
+      <dl class="tool-report-data">
 
-        <tr>
-          <td>
+        <div class="tool-report-row"><dt>
             References
-          </td>
-
-          <td
-            style="
-              padding-left: 20px;
-            "
-          >
+          </dt><dd>
             <strong>
               ${stats.footnoteReferences}
             </strong>
-          </td>
-        </tr>
+          </dd></div>
 
-        <tr>
-          <td>
+        <div class="tool-report-row"><dt>
             Definitions / IDs
-          </td>
-
-          <td
-            style="
-              padding-left: 20px;
-            "
-          >
+          </dt><dd>
             <strong>
               ${stats.footnoteDefinitions}
             </strong>
-          </td>
-        </tr>
+          </dd></div>
 
-      </table>
+      </dl>
 
 
       <h3>
         Table of Contents
       </h3>
 
-      <table>
+      <dl class="tool-report-data">
 
-        <tr>
-          <td>
+        <div class="tool-report-row"><dt>
             TOC entries found
-          </td>
-
-          <td
-            style="
-              padding-left: 20px;
-            "
-          >
+          </dt><dd>
             <strong>
               ${stats.tocEntriesFound}
             </strong>
-          </td>
-        </tr>
+          </dd></div>
 
-        <tr>
-          <td>
+        <div class="tool-report-row"><dt>
             Heading targets found
-          </td>
-
-          <td
-            style="
-              padding-left: 20px;
-            "
-          >
+          </dt><dd>
             <strong>
               ${stats.tocTargetsFound}
             </strong>
-          </td>
-        </tr>
+          </dd></div>
 
-        <tr>
-          <td>
+        <div class="tool-report-row"><dt>
             TOC labels synchronized
-          </td>
-
-          <td
-            style="
-              padding-left: 20px;
-            "
-          >
+          </dt><dd>
             <strong>
               ${stats.tocLabelsSynchronized}
             </strong>
-          </td>
-        </tr>
+          </dd></div>
 
-        <tr>
-          <td>
+        <div class="tool-report-row"><dt>
             Page numbers removed
-          </td>
-
-          <td
-            style="
-              padding-left: 20px;
-            "
-          >
+          </dt><dd>
             <strong>
               ${stats.tocPageNumbersRemoved}
             </strong>
-          </td>
-        </tr>
+          </dd></div>
 
-        <tr>
-          <td>
+        <div class="tool-report-row"><dt>
             Broken TOC links
-          </td>
-
-          <td
-            style="
-              padding-left: 20px;
-            "
-          >
+          </dt><dd>
             <strong>
               ${stats.brokenTocLinks}
             </strong>
-          </td>
-        </tr>
+          </dd></div>
 
-      </table>
+      </dl>
 
 
       <h3>
         Headings
       </h3>
 
-      <table>
+      <dl class="tool-report-data">
 
-        <tr>
-          <td>
+        <div class="tool-report-row"><dt>
             Headings found
-          </td>
-
-          <td
-            style="
-              padding-left: 20px;
-            "
-          >
+          </dt><dd>
             <strong>
               ${stats.headings}
             </strong>
-          </td>
-        </tr>
+          </dd></div>
 
-      </table>
+      </dl>
 
 
       <h3>
@@ -542,9 +439,9 @@ function createCleanupReport(
       ${
         changesHtml
           ? `
-            <table>
+            <dl class="tool-report-data">
               ${changesHtml}
-            </table>
+            </dl>
           `
           : `
             <p>

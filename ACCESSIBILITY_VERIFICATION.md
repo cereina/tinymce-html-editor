@@ -17,9 +17,13 @@ The accessibility fixes are isolated on the local branch `codex/accessibility-wc
 
 These address the findings associated with WCAG 2.2 criteria 1.3.1, 1.4.3, 1.4.10, 1.4.11, 2.1.1, 2.4.3, 2.4.7, 2.5.2, 2.5.3, 4.1.2, and 4.1.3. Reference: [WCAG 2.2](https://www.w3.org/TR/WCAG22/).
 
+## Report structure and headings
+
+Application report tables have been replaced with definition lists. Document tables and the table previews used for editing are preserved. Popup titles start at H2, sections use H3, and nested workstation sections use H4. Browser regressions check nonempty heading text, heading order, H2 popup titles, and the absence of report tables at desktop and narrow widths.
+
 ## Verification
 
-The production build passes. All 46 regression tests passed: the main 42-test browser suite plus four focused interaction tests, using Chrome and axe-core 4.14.0. Scans use the WCAG 2.0, 2.1, and 2.2 A/AA tags and test both desktop and 320 CSS pixel widths. All scanned states in that suite have zero detected violations.
+The production build passes. All 48 regression tests passed in the complete suite, using Chrome and axe-core 4.14.0. Scans use the WCAG 2.0, 2.1, and 2.2 A/AA tags and test both desktop and 320 CSS pixel widths. All scanned states in that suite have zero detected violations.
 
 Coverage includes:
 

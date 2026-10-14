@@ -65,7 +65,7 @@
 }
 
 
-.table-workstation-header h1 {
+.table-workstation-header h2 {
   margin: 0;
 
   font-size: 1.4rem;
@@ -234,7 +234,7 @@
 }
 
 
-.table-workstation-content h2 {
+.table-workstation-content h3 {
   margin:
     0
     0
@@ -244,7 +244,7 @@
 }
 
 
-.table-workstation-content h3 {
+.table-workstation-content h4 {
   margin:
     28px
     0
