@@ -204,3 +204,10 @@ test('Popup heading IDs still provide the accessible window name',async({page})=
   await expect(page.getByRole('heading',{level:2,name:'Insert Download Link',exact:true})).toBeVisible();
   expect(await page.locator('main > h1').textContent()).toContain('HTML Editor');
 });
+
+test('Source syntax colors remain distinct and accessible',async({page})=>{
+  await ready(page,'<h2 id="intro">Introduction</h2><!-- Editor comment --><p class="example">Text</p>');
+  await action(page,'sourcecodepro');
+  const colors=await page.locator('.cm-line span').evaluateAll(elements=>Array.from(new Set(elements.map(el=>getComputedStyle(el).color))));
+  expect(colors.length).toBeGreaterThanOrEqual(3);await audit(page);
+});

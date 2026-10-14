@@ -23,7 +23,7 @@ Application report tables have been replaced with definition lists. Document tab
 
 ## Verification
 
-The production build passes. All 48 regression tests passed in the complete suite, using Chrome and axe-core 4.14.0. Scans use the WCAG 2.0, 2.1, and 2.2 A/AA tags and test both desktop and 320 CSS pixel widths. All scanned states in that suite have zero detected violations.
+The production build passes. The complete 48-test suite passed for the report and heading fixes, using Chrome and axe-core 4.14.0. After restoring syntax colors, all 12 source-focused checks passed, including a new regression that verifies distinct token colors and contrast. The suite now contains 49 tests. Scans use the WCAG 2.0, 2.1, and 2.2 A/AA tags and test both desktop and 320 CSS pixel widths. All scanned states in that suite have zero detected violations.
 
 Coverage includes:
 

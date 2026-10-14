@@ -20,8 +20,18 @@ import {
 } from '@codemirror/lang-html';
 
 import {
-  oneDark,
+  oneDarkTheme,
+  oneDarkHighlightStyle,
 } from '@codemirror/theme-one-dark';
+
+import { HighlightStyle, syntaxHighlighting } from '@codemirror/language';
+
+const accessibleHighlightStyle = HighlightStyle.define(
+  oneDarkHighlightStyle.specs.map(spec => ({
+    ...spec,
+    color: spec.color === '#e06c75' ? '#ff9da6' : spec.color === '#7d8799' ? '#bfc7d5' : spec.color,
+  })),
+);
 
 import * as prettier from 'prettier/standalone';
 
@@ -760,11 +770,12 @@ export function openSourceCodeEditor(
 
         html(),
 
-        oneDark,
+        oneDarkTheme,
+        syntaxHighlighting(accessibleHighlightStyle),
 
         EditorView.lineWrapping,
         EditorView.contentAttributes.of({ 'aria-label': 'Document HTML source' }),
-        EditorView.theme({ '.cm-gutters': { color: '#bfc7d5' }, '.cm-line span': { color: '#e6edf3' } }),
+
 
         EditorView.updateListener.of(
           (

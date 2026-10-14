@@ -9,6 +9,7 @@ This project uses third-party open-source software. The entries below summarize 
 | TinyMCE | 8.9.2 | GPL-2.0-or-later |
 | codemirror | 6.0.2 | MIT |
 | @codemirror/lang-html | 6.4.12 | MIT |
+| @codemirror/language | 6.13.1 | MIT |
 | @codemirror/state | 6.7.6 | MIT |
 | @codemirror/theme-one-dark | 6.1.3 | MIT |
 | @codemirror/view | 6.43.13 | MIT |
