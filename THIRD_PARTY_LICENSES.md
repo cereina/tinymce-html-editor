@@ -21,6 +21,8 @@ This project uses third-party open-source software. The entries below summarize 
 | --- | ---: | --- |
 | Vite | 8.3.0 | MIT |
 | TypeScript | 6.0.3 | Apache-2.0 |
+| @playwright/test | 1.64.0 | Apache-2.0 |
+| axe-core | 4.14.0 | MPL-2.0 |
 
 ## TinyMCE licensing
 

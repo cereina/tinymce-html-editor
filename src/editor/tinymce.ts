@@ -1,3 +1,4 @@
+import { registerAccessibleToolLabels, installEditorAccessibility } from '../accessibility/modal';
 import tinymce, {
   type Editor,
   type RawEditorOptions,
@@ -917,6 +918,8 @@ RawEditorOptions = {
   selector:
     '#editor',
 
+  promotion: false,
+  iframe_aria_text: 'Document HTML editor',
   license_key:
     'gpl',
 
@@ -981,7 +984,7 @@ RawEditorOptions = {
         'Code',
 
       tooltip:
-        'HTML source tools',
+        'Code: HTML source tools',
 
       items:
         'sourcecodepro code',
@@ -1015,6 +1018,8 @@ RawEditorOptions = {
     (
       editor
     ) => {
+      registerAccessibleToolLabels(editor);
+      editor.on('init', () => installEditorAccessibility(editor));
       registerWordImportButton(
         editor
       );

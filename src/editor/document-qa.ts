@@ -1,3 +1,4 @@
+import { openAccessibleModal } from '../accessibility/modal';
 import type {
   Editor,
 } from 'tinymce';
@@ -1611,7 +1612,7 @@ function openDocumentQa(
 
   const backdrop =
     document.createElement(
-      'div'
+      'dialog'
     );
 
   backdrop.className =
@@ -1686,6 +1687,9 @@ function openDocumentQa(
       'div'
     );
 
+  content.tabIndex = 0;
+  content.setAttribute('role', 'region');
+  content.setAttribute('aria-label', 'Document accessibility report');
   content.className =
     'document-qa-content';
 
@@ -1893,11 +1897,7 @@ function openDocumentQa(
   );
 
 
-  document.addEventListener(
-    'keydown',
-    onKeyDown,
-    true
-  );
+
 
 
   document.body.style
@@ -1907,6 +1907,7 @@ function openDocumentQa(
   document.body.appendChild(
     backdrop
   );
+  openAccessibleModal(backdrop, editor, close);
 
   closeButton.focus();
 }

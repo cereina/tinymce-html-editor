@@ -1,3 +1,4 @@
+import { openAccessibleModal } from '../accessibility/modal';
 import type {
   Editor,
 } from 'tinymce';
@@ -2832,7 +2833,7 @@ function openTableWorkstation(
 
   const backdrop =
     document.createElement(
-      'div'
+      'dialog'
     );
 
 
@@ -2915,6 +2916,11 @@ function openTableWorkstation(
     );
 
 
+  navigation?.setAttribute('role', 'navigation');
+  navigation?.setAttribute('aria-label', 'Table navigation');
+  content?.setAttribute('role', 'region');
+  content?.setAttribute('aria-label', 'Table accessibility report');
+  if (content) content.tabIndex = 0;
   if (
     !navigation ||
     !content
@@ -3525,6 +3531,7 @@ function openTableWorkstation(
   document.body.appendChild(
     backdrop
   );
+  openAccessibleModal(backdrop, editor, close);
 
 
   activeTableWorkstationClose =

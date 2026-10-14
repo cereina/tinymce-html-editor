@@ -1,3 +1,4 @@
+import { openAccessibleModal } from '../accessibility/modal';
 import type { Editor } from 'tinymce';
 
 
@@ -3064,7 +3065,7 @@ function openComplexTableReviewer(
 
   const backdrop =
     document.createElement(
-      'div'
+      'dialog'
     );
 
 
@@ -3300,6 +3301,16 @@ function openComplexTableReviewer(
     );
 
 
+  previewContainer.tabIndex = 0;
+  previewContainer.setAttribute('role', 'region');
+  previewContainer.setAttribute('aria-label', 'Table cell selection');
+  previewTable.querySelectorAll<HTMLTableCellElement>('td').forEach(cell => {
+    const button = document.createElement('button');
+    button.type = 'button'; button.className = 'table-a11y-cell-button';
+    button.setAttribute('aria-pressed', 'false');
+    button.setAttribute('aria-label', 'Select data cell: ' + (cell.textContent?.trim() || 'Empty cell'));
+    button.append(...Array.from(cell.childNodes)); cell.append(button);
+  });
   previewContainer.appendChild(
     previewTable
   );
@@ -3342,6 +3353,7 @@ function openComplexTableReviewer(
     );
 
 
+  selectedCellInfo.setAttribute('role', 'status');
   selectedCellInfo.className =
     'table-a11y-selected-cell';
 
@@ -3380,6 +3392,8 @@ function openComplexTableReviewer(
     );
 
 
+  descriptionInput.id = 'table-a11y-description';
+  descriptionLabel.htmlFor = descriptionInput.id;
   descriptionInput.className =
     'table-a11y-description';
 
@@ -3433,6 +3447,8 @@ function openComplexTableReviewer(
     );
 
 
+  validationStatus.setAttribute('role', 'status');
+  validationStatus.setAttribute('aria-live', 'polite');
   validationStatus.className =
     'table-a11y-validation-status';
 
@@ -3559,6 +3575,7 @@ function openComplexTableReviewer(
 
   function highlightSelection():
   void {
+    previewTable.querySelectorAll('button[aria-pressed]').forEach(button => button.setAttribute('aria-pressed', 'false'));
     clearHighlights();
 
 
@@ -3584,6 +3601,7 @@ function openComplexTableReviewer(
       );
 
 
+    selectedCell?.querySelector('button')?.setAttribute('aria-pressed', 'true');
     const ids =
       relationships.get(
         selectedKey
@@ -4091,8 +4109,8 @@ function openComplexTableReviewer(
   );
 
 
+  openAccessibleModal(backdrop, editor, closeReviewer);
   updateValidation();
-
 
   /*
    * Select first data cell automatically.

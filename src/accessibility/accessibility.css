@@ -1,0 +1,31 @@
+/* Accessibility corrections retain the existing visual design. */
+dialog.accessible-modal {
+  box-sizing: border-box;
+  margin: 0;
+  border: 0;
+  width: 100vw;
+  height: 100dvh;
+  max-width: none;
+  max-height: none;
+  overflow: auto;
+}
+dialog.accessible-modal::backdrop { background: transparent; }
+.accessible-modal :focus-visible { outline: 3px solid #005fcc; outline-offset: 3px; }
+.accessible-modal :is(.scp-modal,.document-qa-modal,.table-workstation-modal,.table-a11y-review-modal) { flex-shrink: 0; }
+.accessible-modal .cm-content:focus-visible { outline-offset: -3px; outline-color: #fff; }
+.accessible-modal .cm-scroller:focus-visible { outline-offset: -3px; outline-color: #fff; }
+.tox .tox-textfield:not(:focus),
+.tox .tox-textarea:not(:focus),
+.tox .tox-selectfield select:not(:focus) { border-color: #767676; }
+.table-a11y-cell-button { display: block; width: 100%; min-height: 24px; padding: 4px; border: 0; background: transparent; color: inherit; font: inherit; text-align: start; cursor: pointer; }
+.table-a11y-cell-button[aria-pressed=true] { font-weight: bold; }
+@media (max-height: 500px) {
+  dialog.accessible-modal { align-items: flex-start; }
+  .accessible-modal :is(.scp-modal,.document-qa-modal,.table-workstation-modal,.table-a11y-review-modal) {
+    height: auto; min-height: calc(100dvh - 24px); max-height: none; overflow: visible;
+  }
+  .accessible-modal .scp-editor { flex: none; height: 16rem; min-height: 16rem; }
+  .accessible-modal :is(.document-qa-content,.table-workstation-content,.table-workstation-sidebar,.table-a11y-preview-pane,.table-a11y-relationship-pane) { overflow: visible; }
+  .accessible-modal :is(.table-workstation-body,.table-a11y-review-body) { min-height: 16rem; }
+}
+.scp-editor .cm-gutterElement { color: #bfc7d5; }

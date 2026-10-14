@@ -1,3 +1,4 @@
+import { openAccessibleModal } from '../accessibility/modal';
 import type {
   Editor,
 } from 'tinymce';
@@ -423,7 +424,7 @@ export function openSourceCodeEditor(
 
   const backdrop =
     document.createElement(
-      'div'
+      'dialog'
     );
 
 
@@ -762,6 +763,8 @@ export function openSourceCodeEditor(
         oneDark,
 
         EditorView.lineWrapping,
+        EditorView.contentAttributes.of({ 'aria-label': 'Document HTML source' }),
+        EditorView.theme({ '.cm-gutters': { color: '#bfc7d5' }, '.cm-line span': { color: '#e6edf3' } }),
 
         EditorView.updateListener.of(
           (
@@ -791,6 +794,9 @@ export function openSourceCodeEditor(
     });
 
 
+  view.scrollDOM.tabIndex = 0;
+  view.scrollDOM.setAttribute('role', 'region');
+  view.scrollDOM.setAttribute('aria-label', 'HTML source scroll area');
   statusElement.textContent =
     getCursorStatus(
       view
@@ -1272,7 +1278,7 @@ export function openSourceCodeEditor(
 
 
   backdrop.addEventListener(
-    'mousedown',
+    'click',
     (
       event
     ) => {
@@ -1280,6 +1286,8 @@ export function openSourceCodeEditor(
         event.target ===
         backdrop
       ) {
+        const bounds = modal.getBoundingClientRect();
+        if (event.clientX >= bounds.left && event.clientX <= bounds.right && event.clientY >= bounds.top && event.clientY <= bounds.bottom) return;
         close();
       }
     }
@@ -1333,6 +1341,7 @@ export function openSourceCodeEditor(
   document.body.appendChild(
     backdrop
   );
+  openAccessibleModal(backdrop, editor, close);
 
 
   activeSourceEditorClose =
