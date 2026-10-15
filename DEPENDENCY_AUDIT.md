@@ -1,32 +1,48 @@
 # Dependency audit — October 14, 2026
 
-The audit initially reported one high and three moderate entries.
+## Current result
 
-## Fixed
+npm audit reports **0 vulnerabilities** after the updates below. The vulnerable dependency was removed rather than hidden through audit exclusions.
 
-The development dependency path `vite → postcss → source-map-js` now resolves to source-map-js 1.2.2 rather than 1.2.1. This fixes the indexed-source-map denial-of-service advisory [GHSA-68fv-2mgg-jv7q](https://github.com/advisories/GHSA-68fv-2mgg-jv7q).
+## Source-map security patch
 
-Only this compatible patch version changed in the lockfile. Application dependencies and import behavior were retained.
+The development dependency path `vite → postcss → source-map-js` resolves to source-map-js 1.2.2 rather than 1.2.1. This fixes [GHSA-68fv-2mgg-jv7q](https://github.com/advisories/GHSA-68fv-2mgg-jv7q).
 
-## Remaining upstream warning
+## Mammoth dependency-chain removal
 
-npm still reports three moderate entries for one dependency chain:
+The original dependency chain was:
 
 ```
 mammoth@1.12.3 → argparse@1.0.10 → sprintf-js@1.0.3
 ```
 
-The underlying issue is [GHSA-hp3w-g68c-fv3c](https://github.com/advisories/GHSA-hp3w-g68c-fv3c), involving attacker-controlled format precision. The advisory currently lists no patched sprintf-js release. Mammoth's latest available release, 1.13.0, still declares the same argparse dependency, so upgrading Mammoth alone does not remove the warning.
+A Mammoth-scoped npm override now selects argparse 2.0.1. This parser version has no sprintf-js dependency, removing sprintf-js and the three inherited moderate audit entries. Mammoth itself is retained at the existing installed version.
 
-In the installed Mammoth source, argparse is required by `node_modules/mammoth/bin/mammoth`, its Node command-line program. This application uses Mammoth's browser conversion API. Neither argparse nor sprintf-js appears in the generated browser bundle license report. This supports treating that chain as outside the current browser import path, rather than claiming the upstream packages themselves are fixed.
+```json
+"overrides": {
+  "mammoth": {
+    "argparse": "2.0.1"
+  }
+}
+```
 
-Do not use `npm audit fix --force` to clear the warning: npm proposes downgrading Mammoth to 0.3.29, which would replace the current importer with a much older incompatible release.
+Mammoth's older parser API calls are supported through argparse 2's compatibility aliases. Both CLI help and actual DOCX conversion were checked. The CLI emits deprecation notices for those aliases; the browser importer does not invoke this CLI.
 
-The residual warnings remain visible; no audit exclusions or forced dependency overrides were introduced.
+The override is intentionally limited to Mammoth. Review it when upgrading Mammoth, especially if its upstream parser dependency changes. Do not replace it with an untested major-version override or downgrade Mammoth to the version proposed by `npm audit fix --force`.
 
-## Verification
+The underlying sprintf-js advisory remains unpatched upstream, but sprintf-js is no longer installed in this project's dependency tree: [GHSA-hp3w-g68c-fv3c](https://github.com/advisories/GHSA-hp3w-g68c-fv3c).
 
-- npm audit: zero high or critical entries; three moderate entries remain as described above.
-- Production build passes.
-- All four application and Word-import regression tests passed for this update.
-- All changes are local to `codex/accessibility-wcag22`; main and GitHub are unchanged.
+## Tested results
+
+The production build passed. All five focused regression tests passed: main app accessibility, imported-footnote review, Word import success/undo, malformed-file handling, and Mammoth CLI conversion. The final npm audit reported zero vulnerabilities.
+
+## Repeat verification
+
+```powershell
+npm install
+npm audit
+npm run build
+npm run test:a11y
+```
+
+All changes are local to `codex/accessibility-wcag22`; main and GitHub are unchanged.

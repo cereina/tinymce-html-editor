@@ -25,5 +25,10 @@
     "mammoth": "^1.12.3",
     "prettier": "^3.9.9",
     "tinymce": "^8.9.2"
+  },
+  "overrides": {
+    "mammoth": {
+      "argparse": "2.0.1"
+    }
   }
 }
