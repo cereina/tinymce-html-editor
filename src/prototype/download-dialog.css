@@ -1,0 +1,45 @@
+/* The prototype uses official component appearance. These rules only arrange
+   the native dialog, form and preview; no TinyMCE or other windows are restyled. */
+dialog.gc-download {
+  --gcds-input-margin: 0;
+  --gcds-select-margin: 0;
+  box-sizing: border-box;
+  width: min(66rem, calc(100vw - 2rem));
+  max-width: calc(100vw - 2rem);
+  max-height: 92dvh;
+  padding: 0;
+  border: 0;
+  background: var(--gcds-bg-white);
+  color: var(--gcds-text-primary);
+  font: var(--gcds-font-text);
+}
+.gc-download[open] { display: flex; flex-direction: column; }
+.gc-download::backdrop { background: rgb(0 0 0 / 55%); }
+.gc-download-header, .gc-download-footer { flex: none; display: flex; justify-content: space-between; gap: var(--gcds-spacing-300); padding: var(--gcds-spacing-300) var(--gcds-spacing-400); }
+.gc-download-header { border-bottom: 1px solid var(--gcds-border-default); align-items: start; }
+.gc-download h2 { font: var(--gcds-font-h3); margin: 0 0 var(--gcds-spacing-150); }
+.gc-download h3 { font: var(--gcds-font-h5); margin: 0 0 var(--gcds-spacing-250); }
+.gc-download-body { min-height: 0; overflow: auto; padding: var(--gcds-spacing-400); }
+.gc-download-layout { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); gap: var(--gcds-spacing-400); align-items: start; }
+.gc-download-fields { display: grid; gap: var(--gcds-spacing-300); }
+.gc-download-preview { background: var(--gcds-bg-light); padding: var(--gcds-spacing-300); border-top: .25rem solid var(--gcds-link-default); }
+.gc-download-preview-card { display: flex; align-items: start; gap: var(--gcds-spacing-200); }
+.gc-download-file-icon { flex: none; padding: var(--gcds-spacing-150); font: var(--gcds-font-text-small); font-weight: 700; background: var(--gcds-bg-white); border: 1px solid var(--gcds-border-default); }
+.gc-download-preview-name { margin: 0; font-weight: 700; overflow-wrap: anywhere; }
+.gc-download-preview-meta { margin: var(--gcds-spacing-100) 0 0; }
+.gc-download-destination { margin: var(--gcds-spacing-300) 0; }
+.gc-download-destination dt { font-weight: 700; }
+.gc-download-destination dd { margin: var(--gcds-spacing-100) 0 0; overflow-wrap: anywhere; }
+.gc-download-footer { justify-content: end; flex-wrap: wrap; border-top: 1px solid var(--gcds-border-default); }
+.gc-download :focus-visible { outline: .2rem solid var(--gcds-focus-background); outline-offset: .2rem; }
+.gc-download gcds-alert { display: block; margin-bottom: var(--gcds-spacing-300); }
+@media (max-width: 48rem) {
+  .gc-download-layout { grid-template-columns: minmax(0, 1fr); }
+  .gc-download-header, .gc-download-footer, .gc-download-body { padding: var(--gcds-spacing-200); }
+}
+@media (max-height: 400px) {
+  dialog.gc-download { max-height: calc(100dvh - 1rem); }
+  .gc-download-header { padding-block: var(--gcds-spacing-100); }
+  .gc-download-header gcds-text { display: none; }
+  .gc-download-footer { padding-block: var(--gcds-spacing-100); }
+}

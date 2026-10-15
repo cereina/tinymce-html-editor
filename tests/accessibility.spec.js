@@ -119,9 +119,9 @@ test('Complex reviewer selects another cell with the keyboard and exposes live v
 });
 test('Download validation, insertion, and undo', async ({ page }) => {
   await ready(page);await action(page,'downloadlink');await page.getByRole('button',{name:'Insert download link',exact:true}).click();
-  await expect(page.getByRole('alert')).toContainText('Enter the document title.');await audit(page);
-  await page.getByLabel('Document title',{exact:true}).fill('Report');await page.getByLabel('File path or URL',{exact:true}).fill('/report.pdf');
-  await page.getByLabel('Image URL',{exact:true}).fill('/icon.png');await page.getByLabel('File size',{exact:true}).fill('273');
+  await expect(page.locator('gcds-alert')).toContainText('Enter the document title.');await audit(page);
+  await page.getByRole('textbox',{name:/^Document title/}).fill('Report');await page.getByRole('textbox',{name:/^File path or URL/}).fill('/report.pdf');
+  await page.getByRole('textbox',{name:/^Image URL/}).fill('/icon.png');await page.getByRole('textbox',{name:/^File size/}).fill('273');
   await page.getByRole('button',{name:'Insert download link',exact:true}).click();await expect(page.getByRole('dialog')).toHaveCount(0);
   expect(await page.evaluate(()=>window.tinymce.activeEditor.getContent())).toContain('report.pdf');
   await page.evaluate(()=>window.tinymce.activeEditor.undoManager.undo());expect(await page.evaluate(()=>window.tinymce.activeEditor.getContent())).not.toContain('report.pdf');

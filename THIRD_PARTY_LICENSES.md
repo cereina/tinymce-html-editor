@@ -7,6 +7,7 @@ This project uses third-party open-source software. The entries below summarize 
 | Package | Locked version | License |
 | --- | ---: | --- |
 | TinyMCE | 8.9.2 | GPL-2.0-or-later |
+| @gcds-core/components | 1.6.0 | MIT |
 | codemirror | 6.0.2 | MIT |
 | @codemirror/lang-html | 6.4.12 | MIT |
 | @codemirror/language | 6.13.1 | MIT |

@@ -1,3 +1,4 @@
+import { openGcDownloadDialog } from '../prototype/download-dialog';
 import type {
   Editor,
 } from 'tinymce';
@@ -287,7 +288,7 @@ function openDownloadLinkDialog(
   editor:
     Editor
 ): void {
-  editor.windowManager.open({
+  openGcDownloadDialog(editor, {
     title:
       'Insert Download Link',
 
