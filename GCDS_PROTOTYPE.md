@@ -1,12 +1,14 @@
 # GC Design System prototype
 
-Branch: `codex/gcds-download-prototype`. This is a local prototype for the Download and Clean HTML popups, using official `@gcds-core/components` 1.6.0 components. It has not been merged into main or published to GitHub.
+Branch: `codex/gcds-download-prototype`. This is a local prototype for the Download, Clean HTML, and Document QA popups, using official `@gcds-core/components` 1.6.0 components. It has not been merged into main or published to GitHub.
 
 ## Try it
 
 Run `npm install` and `npm run dev`, then open the local URL printed by Vite. Expand **Document tools** and choose **Download**. Enter document details to see the preview, then insert the download link or cancel.
 
 Choose **Document → Clean HTML** to review cleanup findings. GC alerts show whether changes are proposed and whether references need review. Findings use definition lists under H3 section headings, below an H2 dialog title. **Apply cleanup** changes the document in one undo transaction; Cancel, Close, and Escape preserve it. Apply is disabled when no changes are required. The report scrolls independently of the action buttons.
+
+Choose **Document → Document QA** to inspect the existing QA checks in a GC report. A GC summary alert communicates the result. Counts and document metrics use definition lists, categories use H3 headings, and individual issues use H4 headings with explicit severity labels. GC **Go to issue** buttons close the report and select the associated document element. **Re-run checks** refreshes the report in place, retains button focus, and announces the updated counts. The QA popup does not edit the document.
 
 ## Scope
 
