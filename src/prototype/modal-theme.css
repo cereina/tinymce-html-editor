@@ -17,6 +17,9 @@
 .gc-enhanced :focus-visible { outline-color: var(--gcds-focus-background); }
 .gc-enhanced .gc-modal-action { flex: none; }
 .gc-enhanced .scp-toolbar-group { min-width: 0; max-width: 100%; flex-wrap: wrap; }
+.gc-enhanced .scp-toolbar { align-items: flex-end; }
+.gc-enhanced .scp-toolbar-group { align-items: flex-end; }
+.gc-enhanced .scp-toolbar gcds-checkboxes { --gcds-checkbox-margin: 0; }
 .gc-enhanced :is(.scp-header,.table-workstation-header,.table-a11y-review-header) > :first-child { min-width: 0; overflow-wrap: anywhere; }
 .gc-enhanced gcds-select { --gcds-select-margin: 0; }
 .gc-enhanced gcds-checkboxes { --gcds-checkboxes-margin: 0; }
