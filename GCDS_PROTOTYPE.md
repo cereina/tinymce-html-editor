@@ -1,6 +1,6 @@
 # GC Design System prototype
 
-Branch: `codex/gcds-download-prototype`. This is a local prototype for the editor's popup windows, using official `@gcds-core/components` 1.6.0 components. It has not been merged into main or published to GitHub.
+The editor's GC Design System integration was developed on `codex/gcds-download-prototype`, using official `@gcds-core/components` 1.6.0 components. This document describes the popup designs and their verification.
 
 ## Try it
 

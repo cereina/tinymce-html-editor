@@ -1,6 +1,6 @@
 # Accessibility verification
 
-The GC Design System prototype is on the local branch `codex/gcds-download-prototype`. Its changes have not been merged into `main` or pushed to GitHub. Earlier accessibility verification is retained below.
+This document records verification of the GC Design System integration developed on `codex/gcds-download-prototype`, along with the earlier accessibility fixes.
 
 ## What changed
 
