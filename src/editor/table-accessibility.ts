@@ -1,4 +1,5 @@
 import { openGcToolDialog } from '../prototype/tool-dialog';
+import { hasTableHeaderMarkup, openRemoveTableHeaderMarkup } from './table-header-reset';
 import { openAccessibleModal } from '../accessibility/modal';
 import type { Editor } from 'tinymce';
 
@@ -4541,6 +4542,7 @@ function openTableAccessibilityDialog(
     },
 
     buttons: [
+      { type: 'custom', name: 'removeHeaderMarkup', text: 'Remove header markup…', enabled: hasTableHeaderMarkup(table) },
       {
         type:
           'cancel',
@@ -4564,6 +4566,9 @@ function openTableAccessibilityDialog(
       },
     ],
 
+    onAction: (api, details) => {
+      if (details.name === 'removeHeaderMarkup') { api.close(); openRemoveTableHeaderMarkup(editor, table); }
+    },
     onSubmit:
       (api) => {
         const data =

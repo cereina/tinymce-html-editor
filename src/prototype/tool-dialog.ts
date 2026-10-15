@@ -12,6 +12,7 @@ interface ToolSpec {
   initialData?: Record<string, string | boolean>;
   buttons?: Ui.Dialog.DialogFooterButtonSpec[];
   onSubmit?: (api: ToolApi) => void; onCancel?: () => void; onClose?: () => void;
+  onAction?: (api: ToolApi, details: { name: string }) => void;
 }
 let sequence = 0;
 
@@ -88,7 +89,8 @@ export function openGcToolDialog(editor: Editor, spec: ToolSpec): void {
   spec.buttons?.forEach(item => {
     const action = button(item.text ?? (item.type === 'submit' ? 'Apply' : 'Close'), 'buttonType' in item && item.buttonType === 'primary');
     action.disabled = 'enabled' in item && item.enabled === false;
-    action.addEventListener('click', item.type === 'submit' ? submit : cancel); dialog.querySelector('footer')!.append(action);
+    action.addEventListener('click', item.type === 'submit' ? submit : item.type === 'custom'
+      ? () => spec.onAction?.(api, { name: item.name ?? '' }) : cancel); dialog.querySelector('footer')!.append(action);
   });
   dialog.addEventListener('cancel', event => { event.preventDefault(); cancel(); });
   dialog.addEventListener('keydown', event => {
