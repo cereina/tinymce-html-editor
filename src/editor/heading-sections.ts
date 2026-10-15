@@ -1,3 +1,4 @@
+import { openGcToolDialog } from '../prototype/tool-dialog';
 import type {
   Editor,
 } from 'tinymce';
@@ -1595,7 +1596,7 @@ function openBuildSectionsDialog(
     );
 
 
-  editor.windowManager.open({
+  openGcToolDialog(editor, {
     title:
       'Heading Sections',
 
@@ -1738,7 +1739,7 @@ function openRemoveSectionsDialog(
   }
 
 
-  editor.windowManager.open({
+  openGcToolDialog(editor, {
     title:
       'Remove Generated Sections',
 

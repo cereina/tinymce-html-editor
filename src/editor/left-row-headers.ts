@@ -1,3 +1,4 @@
+import { openGcToolDialog } from '../prototype/tool-dialog';
 import type {
   Editor,
 } from 'tinymce';
@@ -1414,7 +1415,7 @@ function openLeftRowHeadersDialog(
     );
 
 
-  editor.windowManager.open({
+  openGcToolDialog(editor, {
     title:
       'Configure Left Row Headers',
 

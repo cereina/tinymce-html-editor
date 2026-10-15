@@ -1,3 +1,4 @@
+import { openGcToolDialog } from '../prototype/tool-dialog';
 import type {
   Editor,
 } from 'tinymce';
@@ -1632,7 +1633,7 @@ export function reviewImportedFootnotes(
         };
 
 
-      editor.windowManager.open({
+      openGcToolDialog(editor, {
         title:
           'Word Footnotes Detected',
 
@@ -1909,7 +1910,7 @@ function openFootnoteManager(
       html
     );
 
-  editor.windowManager.open({
+  openGcToolDialog(editor, {
     title:
       'Footnote Manager',
 

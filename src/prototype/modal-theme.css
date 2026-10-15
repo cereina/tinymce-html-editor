@@ -1,0 +1,31 @@
+/* GC tokens also style the native controls required by the code editor,
+   interactive table grid, and TinyMCE's built-in dialog implementations. */
+.gc-enhanced [data-gc-original] { display: none !important; }
+.gc-enhanced :is(.scp-modal,.table-workstation-modal,.table-a11y-review-modal) {
+  font: var(--gcds-font-text); color: var(--gcds-text-primary); background: var(--gcds-bg-white);
+  border: 1px solid var(--gcds-border-default); border-radius: 0; box-shadow: none;
+}
+.gc-enhanced :is(.scp-header,.scp-footer,.scp-toolbar,.table-workstation-header,.table-workstation-footer,.table-a11y-review-header,.table-a11y-review-footer) {
+  background: var(--gcds-bg-white); border-color: var(--gcds-border-default); gap: var(--gcds-spacing-200);
+}
+.gc-enhanced :is(.scp-modal,.table-workstation-modal,.table-a11y-review-modal) h2 { font: var(--gcds-font-h3); }
+.gc-enhanced :is(.scp-modal,.table-workstation-modal,.table-a11y-review-modal) h3 { font: var(--gcds-font-h5); }
+.gc-enhanced :is(.scp-modal,.table-workstation-modal,.table-a11y-review-modal) h4 { font: var(--gcds-font-h6); }
+.gc-enhanced :is(button,input,select,textarea):not(.table-a11y-cell-button) { font: inherit; }
+.gc-enhanced :is(input,select,textarea) { border-color: var(--gcds-border-default); border-radius: 0; accent-color: var(--gcds-link-default); }
+.gc-enhanced :is(input[type="checkbox"],input[type="radio"]) { min-width: 1.25rem; min-height: 1.25rem; }
+.gc-enhanced :focus-visible { outline-color: var(--gcds-focus-background); }
+.gc-enhanced .gc-modal-action { flex: none; }
+.gc-enhanced .scp-toolbar-group { min-width: 0; max-width: 100%; flex-wrap: wrap; }
+.gc-enhanced :is(.scp-header,.table-workstation-header,.table-a11y-review-header) > :first-child { min-width: 0; overflow-wrap: anywhere; }
+.gc-enhanced gcds-select { --gcds-select-margin: 0; }
+.gc-enhanced gcds-checkboxes { --gcds-checkboxes-margin: 0; }
+.gc-enhanced :is(.table-workstation-summary,.table-workstation-metric,.table-a11y-review-summary) { background: var(--gcds-bg-light); border-color: var(--gcds-border-default); }
+/* Preserve authored table previews and the code editor's syntax colours. */
+.tox :is(.tox-dialog,.tox-dialog-wrap,.tox-dialog__header,.tox-dialog__footer) { font-family: "Noto Sans",sans-serif; color: var(--gcds-text-primary); }
+.tox .tox-dialog { border-radius: 0; border-color: var(--gcds-border-default); }
+.tox .tox-dialog :is(.tox-dialog__header,.tox-dialog__footer) { background: var(--gcds-bg-white); border-color: var(--gcds-border-default); }
+.tox .tox-dialog .tox-dialog__title { font: var(--gcds-font-h3); }
+.tox .tox-dialog :is(.tox-button,.tox-textfield,.tox-textarea,.tox-selectfield select) { border-radius: 0; font-family: "Noto Sans",sans-serif; }
+.tox .tox-dialog .tox-button:not(.tox-button--secondary):not(.tox-button--naked) { background: var(--gcds-bg-primary); border-color: var(--gcds-bg-primary); color: var(--gcds-text-light, #fff); }
+.tox .tox-dialog :is(.tox-button,.tox-textfield,.tox-textarea,.tox-selectfield select):focus-visible { outline: .2rem solid var(--gcds-focus-background); outline-offset: .2rem; }

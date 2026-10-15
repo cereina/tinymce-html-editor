@@ -1,0 +1,15 @@
+.gc-tool { --gcds-input-margin: 0; --gcds-select-margin: 0; --gcds-checkboxes-margin: 0; }
+.gc-tool .gc-tool-body { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--gcds-spacing-300); }
+.gc-tool .gc-download-header > :first-child { min-width: 0; overflow-wrap: anywhere; }
+.gc-tool :is(gcds-input,gcds-select,gcds-checkboxes) { min-width: 0; max-width: 100%; }
+.gc-tool h3 { margin-top: var(--gcds-spacing-300); }
+.gc-tool h4 { font: var(--gcds-font-h6); }
+.gc-tool-report { min-width: 0; overflow-wrap: anywhere; }
+.gc-tool-report p { margin: 0 0 var(--gcds-spacing-200); }
+.gc-tool-report code { overflow-wrap: anywhere; }
+.gc-tool-report .tool-report-data { padding: var(--gcds-spacing-200); background: var(--gcds-bg-light); }
+.gc-tool-report .tool-report-row { border-bottom: 1px solid var(--gcds-border-default); padding-block: var(--gcds-spacing-150); }
+@media (max-height: 400px) {
+  dialog.gc-tool[open] { display: block; overflow: auto; }
+  .gc-tool .gc-tool-body { overflow: visible; }
+}

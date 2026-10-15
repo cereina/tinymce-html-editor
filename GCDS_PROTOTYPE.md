@@ -1,6 +1,6 @@
 # GC Design System prototype
 
-Branch: `codex/gcds-download-prototype`. This is a local prototype for the Download, Clean HTML, and Document QA popups, using official `@gcds-core/components` 1.6.0 components. It has not been merged into main or published to GitHub.
+Branch: `codex/gcds-download-prototype`. This is a local prototype for the editor's popup windows, using official `@gcds-core/components` 1.6.0 components. It has not been merged into main or published to GitHub.
 
 ## Try it
 
@@ -10,11 +10,19 @@ Choose **Document → Clean HTML** to review cleanup findings. GC alerts show wh
 
 Choose **Document → Document QA** to inspect the existing QA checks in a GC report. A GC summary alert communicates the result. Counts and document metrics use definition lists, categories use H3 headings, and individual issues use H4 headings with explicit severity labels. GC **Go to issue** buttons close the report and select the associated document element. **Re-run checks** refreshes the report in place, retains button focus, and announces the updated counts. The QA popup does not edit the document.
 
+## Other popup windows
+
+The shared GC form renderer covers Heading Sections (build/rebuild and removal), Table of Contents (creation/rebuild and removal), Footnote Manager, imported Word footnote review, WET / GCWeb Class Manager, Table Accessibility settings, and Left Row Headers. These windows use GC buttons, inputs, selects, and checkboxes as appropriate. Existing generators and undo transactions are retained. Generated report panels discard their former inline styles and use GC typography and colour tokens. Cancellation and close callbacks are preserved, including the asynchronous imported-footnote review workflow. Form validation messages appear inside the modal.
+
+Source Code Pro uses GC action buttons, an indentation select, and the automatic-formatting checkbox. Its CodeMirror editor and syntax colours are preserved. Table Workstation uses GC window and table action buttons. The complex table reviewer uses GC window actions and header-assignment checkboxes; its interactive cell grid remains a native widget. These adapters delegate to the existing handlers and preserve disabled states. Modal keyboard navigation includes the controls inside GC component shadow roots.
+
+TinyMCE's built-in link, source, search, and table dialogs retain TinyMCE controls and behavior, with GC typography, colours, square borders, and focus styling. They are compatibility-themed dialogs rather than replacements built from GC web components. File-selection windows belong to the browser or operating system.
+
 ## Scope
 
 The popup uses GC inputs, selects, buttons, explanatory text, and validation alerts. A native HTML dialog provides the modal container, with an H2 title and H3 sections. Small layout rules arrange the form and preview. The existing HTML generation and undo transaction are retained.
 
-GC's global stylesheet supplies official design tokens and fonts. Its font stylesheet requests Google Fonts, as distributed by the package. Production deployment should review font hosting requirements. Other editor windows still use their existing components.
+GC's global stylesheet supplies official design tokens and fonts. Its font stylesheet requests Google Fonts, as distributed by the package. Production deployment should review font hosting requirements. Specialized editor/grid layout rules remain where needed for their interactions.
 
 Keyboard behavior includes initial heading focus, Tab and Shift+Tab containment across component shadow roots, Escape, focus return, and Enter submission from text inputs. The form scrolls independently, allowing access at narrow widths and short viewport heights. Required fields have visible labels and inline errors.
 

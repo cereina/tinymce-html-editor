@@ -1,6 +1,6 @@
 # Accessibility verification
 
-The accessibility fixes are isolated on the local branch `codex/accessibility-wcag22`. The `main` branch and GitHub repository were not changed.
+The GC Design System prototype is on the local branch `codex/gcds-download-prototype`. Its changes have not been merged into `main` or pushed to GitHub. Earlier accessibility verification is retained below.
 
 ## What changed
 
@@ -22,6 +22,10 @@ These address the findings associated with WCAG 2.2 criteria 1.3.1, 1.4.3, 1.4.1
 Application report tables have been replaced with definition lists. Document tables and the table previews used for editing are preserved. Popup titles start at H2, sections use H3, and nested workstation sections use H4. Browser regressions check nonempty heading text, heading order, H2 popup titles, and the absence of report tables at desktop and narrow widths.
 
 ## Verification
+
+GC prototype verification on October 15, 2026: the complete 76-test regression run passed. Eight additional checks cover complex-table header assignments, source action wrapping, and all six shared forms at a 320 by 225 CSS pixel viewport. After correcting the source toolbar wrapping and narrow-form overflow, all 18 relevant follow-up checks passed, including repeated desktop/mobile accessibility scans. The suite now contains 84 tests. Complex-table header choices were verified across cell navigation, application, and undo. GC checkbox interaction was tested using Space and visible-label pointer activation. Settings persistence, validation feedback inside the modal, and imported-footnote cancellation were also checked. Desktop and mobile screenshots were visually reviewed.
+
+Earlier baseline verification:
 
 The production build passes. The complete 48-test suite passed for the report and heading fixes, using Chrome and axe-core 4.14.0. After restoring syntax colors, all 12 source-focused checks passed, including a new regression that verifies distinct token colors and contrast. The suite now contains 49 tests. Scans use the WCAG 2.0, 2.1, and 2.2 A/AA tags and test both desktop and 320 CSS pixel widths. All scanned states in that suite have zero detected violations.
 

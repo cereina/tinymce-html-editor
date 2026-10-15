@@ -1,3 +1,4 @@
+import { openGcToolDialog } from '../prototype/tool-dialog';
 import type {
   Editor,
 } from 'tinymce';
@@ -1494,7 +1495,7 @@ function openCreateTocDialog(
   ];
 
 
-  editor.windowManager.open({
+  openGcToolDialog(editor, {
     title:
       'Create / Rebuild Table of Contents',
 
@@ -2041,7 +2042,7 @@ function openRemoveTocDialog(
   }
 
 
-  editor.windowManager.open({
+  openGcToolDialog(editor, {
     title:
       'Remove Generated TOC',
 

@@ -1,5 +1,6 @@
 import type { Editor, Ui } from 'tinymce';
 import './accessibility.css';
+import { enhanceGcModal, modalTabTargets } from '../prototype/modal-actions';
 
 /** Use the platform's modal semantics, including inert background and focus
  * containment. The existing tool remains responsible for its own teardown. */
@@ -7,6 +8,7 @@ export function openAccessibleModal(dialog: HTMLDialogElement, editor: Editor, c
   const opener = document.activeElement as HTMLElement | null;
   const panel = dialog.querySelector<HTMLElement>('[role="dialog"]');
   dialog.classList.add('accessible-modal');
+  const disconnectGc = enhanceGcModal(dialog);
   if (panel) {
     dialog.setAttribute('aria-labelledby', panel.getAttribute('aria-labelledby')!);
     panel.removeAttribute('role');
@@ -20,11 +22,11 @@ export function openAccessibleModal(dialog: HTMLDialogElement, editor: Editor, c
       event.preventDefault(); event.stopImmediatePropagation(); cancel();
     }
     if (event.key === 'Tab') {
-      const controls = Array.from(dialog.querySelectorAll<HTMLElement>(
-        'button:not([disabled]),input:not([disabled]),select:not([disabled]),textarea:not([disabled]),a[href],[tabindex="0"],[contenteditable="true"]'
-      )).filter(el => el.getClientRects().length && !el.closest('[hidden]'));
+      const controls = modalTabTargets(dialog);
       if (controls.length) {
-        const current = controls.indexOf(document.activeElement as HTMLElement);
+        let active = document.activeElement;
+        while (active?.shadowRoot?.activeElement) active = active.shadowRoot.activeElement;
+        const current = controls.indexOf(active as HTMLElement);
         const next = current < 0
           ? (event.shiftKey ? controls.length - 1 : 0)
           : (current + (event.shiftKey ? -1 : 1) + controls.length) % controls.length;
@@ -39,7 +41,7 @@ export function openAccessibleModal(dialog: HTMLDialogElement, editor: Editor, c
     if (document.activeElement === document.body) editor.focus();
   };
   const observer = new MutationObserver(() => {
-    if (!dialog.isConnected) { observer.disconnect(); restore(); }
+    if (!dialog.isConnected) { observer.disconnect(); disconnectGc(); restore(); }
   });
   observer.observe(document.body, { childList: true });
   dialog.showModal();

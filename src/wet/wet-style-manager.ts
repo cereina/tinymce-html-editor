@@ -1,3 +1,4 @@
+import { openGcToolDialog } from '../prototype/tool-dialog';
 import type {
   Editor,
 } from 'tinymce';
@@ -1058,7 +1059,7 @@ function openWetClassManager(
      ------------------------------------------------------- */
 
 
-  editor.windowManager.open({
+  openGcToolDialog(editor, {
     title:
       'WET / GCWeb Class Manager',
 

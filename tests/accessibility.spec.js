@@ -129,7 +129,7 @@ test('Download validation, insertion, and undo', async ({ page }) => {
 for (const [name,button] of [['sections','Build Sections'],['tocmanager','Create TOC']]) {
   test('Generated '+name+' create and remove dialogs',async({page})=>{
     await ready(page);await action(page,name);await page.getByRole('button',{name:button,exact:true}).click();await action(page,name,1);await expect(page.getByRole('dialog')).toBeVisible();await audit(page);
-    await page.getByRole('dialog').locator('.tox-dialog__footer .tox-button:not(.tox-button--secondary)').click();await expect(page.getByRole('dialog')).toHaveCount(0);
+    await page.getByRole('button',{name:/^Remove (Sections|TOC)$/}).click();await expect(page.getByRole('dialog')).toHaveCount(0);
   });
 }
 test('Imported footnote review dialog',async({page})=>{
@@ -160,7 +160,7 @@ test('Word import failure preserves the document and announces the error',async(
   await expect(page.getByRole('alert')).toBeVisible();expect(await page.evaluate(()=>window.tinymce.activeEditor.getContent())).toBe(before);await audit(page);
 });
 test('Simple table caption change and undo',async({page})=>{
-  await ready(page);await action(page,'tableaccessibility');await page.getByLabel('Table caption',{exact:true}).fill('Updated caption');
+  await ready(page);await action(page,'tableaccessibility');await page.getByRole('textbox',{name:/^Table caption/}).fill('Updated caption');
   await page.getByRole('button',{name:'Apply accessibility',exact:true}).click();await expect(page.getByRole('dialog')).toHaveCount(0);
   expect(await page.evaluate(()=>window.tinymce.activeEditor.getContent())).toContain('Updated caption');await page.evaluate(()=>window.tinymce.activeEditor.undoManager.undo());
   expect(await page.evaluate(()=>window.tinymce.activeEditor.getContent())).not.toContain('Updated caption');
@@ -195,7 +195,7 @@ test('Keyboard target sizes and focus indicator for table cells',async({page})=>
 
 test('Long report content can be scrolled with the keyboard',async({page})=>{
   await ready(page);await action(page,'footnotes');await page.setViewportSize({width:320,height:800});
-  const content=page.locator('.tox-dialog__body-content');await content.focus();await page.keyboard.press('PageDown');
+  const content=page.getByRole('region',{name:'Footnote Manager contents',exact:true});await content.focus();await page.keyboard.press('PageDown');
   await expect.poll(()=>content.evaluate(el=>el.scrollTop)).toBeGreaterThan(0);await audit(page);
 });
 test('Popup heading IDs still provide the accessible window name',async({page})=>{

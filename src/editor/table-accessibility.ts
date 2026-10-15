@@ -1,3 +1,4 @@
+import { openGcToolDialog } from '../prototype/tool-dialog';
 import { openAccessibleModal } from '../accessibility/modal';
 import type { Editor } from 'tinymce';
 
@@ -4432,7 +4433,7 @@ function openTableAccessibilityDialog(
           .suggestedHeaderRows;
 
 
-  editor.windowManager.open({
+  openGcToolDialog(editor, {
     title:
       'Table Accessibility',
 
