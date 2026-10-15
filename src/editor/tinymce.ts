@@ -1,3 +1,4 @@
+import { openGcCleanupDialog } from '../prototype/cleanup-dialog';
 import { registerAccessibleToolLabels, installEditorAccessibility } from '../accessibility/modal';
 import tinymce, {
   type Editor,
@@ -221,242 +222,28 @@ function createCleanupReport(
   ] as const;
 
 
-  const changesHtml =
-    changes
-      .filter(
-        (
-          [, count]
-        ) =>
-          count >
-          0
-      )
-      .map(
-        (
-          [label, count]
-        ) => `
-          <div class="tool-report-row"><dt>
-              ${escapeHtml(
-                label
-              )}
-            </dt><dd>
-              ${count}
-            </dd></div>
-        `
-      )
-      .join(
-        ''
-      );
-
-
-  const warningsHtml =
-    result.warnings.length >
-    0
-      ? `
-        <div
-          style="
-            margin-top: 20px;
-            padding: 14px;
-            background: #fff8e5;
-            border-radius: 6px;
-          "
-        >
-          <strong>
-            Review recommended
-          </strong>
-
-          <ul
-            style="
-              margin-bottom: 0;
-            "
-          >
-            ${result.warnings
-              .map(
-                (
-                  warning
-                ) => `
-                  <li>
-                    ${escapeHtml(
-                      warning
-                    )}
-                  </li>
-                `
-              )
-              .join(
-                ''
-              )}
-          </ul>
-        </div>
-      `
-      : `
-        <div
-          style="
-            margin-top: 20px;
-            padding: 14px;
-            background: #eef8f0;
-            border-radius: 6px;
-          "
-        >
-          No structural warnings detected.
-        </div>
-      `;
-
-
-  return `
-    <div>
-
-      <h3
-        style="
-          margin-top: 0;
-        "
-      >
-        Internal references
-      </h3>
-
-      <dl class="tool-report-data">
-
-        <div class="tool-report-row"><dt>
-            Internal links
-          </dt><dd>
-            <strong>
-              ${stats.internalLinks}
-            </strong>
-          </dd></div>
-
-        <div class="tool-report-row"><dt>
-            Referenced IDs protected
-          </dt><dd>
-            <strong>
-              ${stats.referencedIdsProtected}
-            </strong>
-          </dd></div>
-
-        <div class="tool-report-row"><dt>
-            Broken internal links
-          </dt><dd>
-            <strong>
-              ${stats.brokenInternalLinks}
-            </strong>
-          </dd></div>
-
-      </dl>
-
-
-      <h3>
-        Footnotes / endnotes
-      </h3>
-
-      <dl class="tool-report-data">
-
-        <div class="tool-report-row"><dt>
-            References
-          </dt><dd>
-            <strong>
-              ${stats.footnoteReferences}
-            </strong>
-          </dd></div>
-
-        <div class="tool-report-row"><dt>
-            Definitions / IDs
-          </dt><dd>
-            <strong>
-              ${stats.footnoteDefinitions}
-            </strong>
-          </dd></div>
-
-      </dl>
-
-
-      <h3>
-        Table of Contents
-      </h3>
-
-      <dl class="tool-report-data">
-
-        <div class="tool-report-row"><dt>
-            TOC entries found
-          </dt><dd>
-            <strong>
-              ${stats.tocEntriesFound}
-            </strong>
-          </dd></div>
-
-        <div class="tool-report-row"><dt>
-            Heading targets found
-          </dt><dd>
-            <strong>
-              ${stats.tocTargetsFound}
-            </strong>
-          </dd></div>
-
-        <div class="tool-report-row"><dt>
-            TOC labels synchronized
-          </dt><dd>
-            <strong>
-              ${stats.tocLabelsSynchronized}
-            </strong>
-          </dd></div>
-
-        <div class="tool-report-row"><dt>
-            Page numbers removed
-          </dt><dd>
-            <strong>
-              ${stats.tocPageNumbersRemoved}
-            </strong>
-          </dd></div>
-
-        <div class="tool-report-row"><dt>
-            Broken TOC links
-          </dt><dd>
-            <strong>
-              ${stats.brokenTocLinks}
-            </strong>
-          </dd></div>
-
-      </dl>
-
-
-      <h3>
-        Headings
-      </h3>
-
-      <dl class="tool-report-data">
-
-        <div class="tool-report-row"><dt>
-            Headings found
-          </dt><dd>
-            <strong>
-              ${stats.headings}
-            </strong>
-          </dd></div>
-
-      </dl>
-
-
-      <h3>
-        Cleanup changes
-      </h3>
-
-      ${
-        changesHtml
-          ? `
-            <dl class="tool-report-data">
-              ${changesHtml}
-            </dl>
-          `
-          : `
-            <p>
-              No automatic cleanup
-              changes are required.
-            </p>
-          `
-      }
-
-      ${warningsHtml}
-
-    </div>
-  `;
+  const section = (title: string, rows: readonly (readonly [string, number])[]) =>
+    `<section><h3>${escapeHtml(title)}</h3><dl>${rows.map(([label, count]) =>
+      `<div><dt>${escapeHtml(label)}</dt><dd>${count}</dd></div>`).join('')}</dl></section>`;
+  const proposed = changes.filter(([, count]) => count > 0);
+  return [
+    section('Internal references', [
+      ['Internal links', stats.internalLinks], ['Referenced IDs protected', stats.referencedIdsProtected],
+      ['Broken internal links', stats.brokenInternalLinks],
+    ]),
+    section('Footnotes / endnotes', [
+      ['References', stats.footnoteReferences], ['Definitions / IDs', stats.footnoteDefinitions],
+    ]),
+    section('Table of Contents', [
+      ['TOC entries found', stats.tocEntriesFound], ['Heading targets found', stats.tocTargetsFound],
+      ['TOC labels synchronized', stats.tocLabelsSynchronized], ['Page numbers removed', stats.tocPageNumbersRemoved],
+      ['Broken TOC links', stats.brokenTocLinks],
+    ]),
+    section('Headings', [['Headings found', stats.headings]]),
+    proposed.length ? section('Cleanup changes', proposed)
+      : '<section><h3>Cleanup changes</h3><p>No automatic cleanup changes are required.</p></section>',
+  ].join('');
 }
-
 
 /* =========================================================
    WORD IMPORT
@@ -693,84 +480,7 @@ function registerCleanHtmlButton(
             );
 
 
-          editor.windowManager.open({
-            title:
-              'HTML Cleanup Report',
-
-            size:
-              'medium',
-
-            body: {
-              type:
-                'panel',
-
-              items: [
-                {
-                  type:
-                    'htmlpanel',
-
-                  html:
-                    createCleanupReport(
-                      result
-                    ),
-                },
-              ],
-            },
-
-            buttons: [
-              {
-                type:
-                  'cancel',
-
-                text:
-                  'Cancel',
-              },
-
-              {
-                type:
-                  'submit',
-
-                text:
-                  'Apply cleanup',
-
-                buttonType:
-                  'primary',
-
-                enabled:
-                  result.hasChanges,
-              },
-            ],
-
-            onSubmit:
-              (
-                api
-              ) => {
-                editor.undoManager.transact(
-                  () => {
-                    editor.setContent(
-                      result.cleanedHtml
-                    );
-                  }
-                );
-
-
-                api.close();
-
-
-                editor
-                  .notificationManager
-                  .open({
-                    text:
-                      'HTML cleanup completed.',
-
-                    type:
-                      'success',
-
-                    timeout:
-                      3000,
-                  });
-              },
-          });
+          openGcCleanupDialog(editor, result, createCleanupReport(result));
         },
     }
   );
