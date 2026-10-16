@@ -1,5 +1,7 @@
 import type { Editor } from 'tinymce';
 import type { QaReport } from '../editor/document-qa';
+import { reviewContent, applyContentSuggestion, styleGuide, type ContentLanguage } from '../editor/content-style';
+import { modalTabTargets } from './modal-actions';
 import type {} from '@gcds-core/components/dist/types/components';
 import { defineCustomElementGcdsButton, defineCustomElementGcdsText, defineCustomElementGcdsAlert } from '@gcds-core/components/dist/components/index.js';
 import '@gcds-core/components/dist/gcds/gcds.css';
@@ -55,6 +57,53 @@ export function openGcQaDialog(editor: Editor, analyze: () => QaReport): void {
     return list;
   };
   let runs = 0;
+  let language: ContentLanguage = 'en';
+  const ignored = new WeakMap<Text, Set<string>>();
+  const styleSection = document.createElement('section');
+  styleSection.className = 'gc-qa-category';
+  const renderStyle = () => {
+    styleSection.replaceChildren(heading(3, 'Content style review'));
+    const note = document.createElement('p');
+    note.textContent = 'Advisory Canada.ca writing suggestions, separate from accessibility results. Check context before applying. Checks cover text within individual text nodes; code, links and HTML attributes are excluded. Nested language attributes take precedence.';
+    const label = document.createElement('label'); label.htmlFor = 'qa-content-language'; label.textContent = 'Content language';
+    const select = document.createElement('select'); select.id = 'qa-content-language';
+    for (const [value, text] of [['en', 'English'], ['fr', 'Français']]) {
+      const option = document.createElement('option'); option.value = value; option.textContent = text; select.append(option);
+    }
+    select.value = language;
+    select.addEventListener('change', () => { language = select.value as ContentLanguage; renderStyle(); styleSection.querySelector('select')!.focus(); });
+    styleSection.append(note, label, select);
+    const key = (issue: ReturnType<typeof reviewContent>[number]) => JSON.stringify([issue.start, issue.original, issue.replacement, issue.language, issue.node.data]);
+    const issues = reviewContent(editor.getBody(), language).filter(issue => !ignored.get(issue.node)?.has(key(issue)));
+    const count = document.createElement('p'); count.textContent = `${issues.length} content style suggestions. Use the editor Undo command to reverse an applied suggestion.`; styleSection.append(count);
+    issues.forEach((issue, index) => {
+      const article = document.createElement('article'); article.className = 'gc-qa-issue';
+      const detail = document.createElement('p'); detail.textContent = issue.detail;
+      const preview = document.createElement('p');
+      preview.textContent = `Original: ${issue.original}${issue.replacement === undefined ? '' : ` → Suggested: ${issue.replacement.replaceAll('\u00a0', '⍽')} (⍽ means non-breaking space)`}`;
+      const source = document.createElement('a'); source.href = styleGuide(issue.language); source.target = '_blank'; source.rel = 'noopener noreferrer'; source.textContent = `${issue.language === 'fr' ? 'French' : 'English'} Canada.ca style guide (opens in a new tab)`;
+      const actions = document.createElement('div'); actions.className = 'gc-qa-style-actions';
+      const go = button('Go to content issue'); go.setAttribute('aria-label', `Go to content issue ${index + 1}: ${issue.title}`);
+      go.addEventListener('click', () => {
+        if (!issue.node.isConnected || issue.node.data.slice(issue.start, issue.start + issue.original.length) !== issue.original) { renderStyle(); return; }
+        close(); editor.focus(); const range = editor.getDoc().createRange(); range.setStart(issue.node, issue.start); range.setEnd(issue.node, issue.start + issue.original.length); editor.selection.setRng(range); issue.node.parentElement?.scrollIntoView({ block: 'center' });
+      });
+      actions.append(go);
+      if (issue.replacement !== undefined) {
+        const apply = button('Apply suggestion'); apply.setAttribute('aria-label', `Apply suggestion ${index + 1}: ${issue.title}`);
+        apply.addEventListener('click', () => {
+          let applied = false;
+          editor.undoManager.transact(() => { applied = applyContentSuggestion(issue); });
+          if (applied) { editor.nodeChanged(); editor.setDirty(true); }
+          renderStyle(); selectFocus(); status.textContent = applied ? 'Suggestion applied. Use editor Undo to reverse this change.' : 'Content changed. Suggestions refreshed; no change was applied.';
+        }); actions.append(apply);
+      }
+      const ignore = button('Ignore'); ignore.setAttribute('aria-label', `Ignore suggestion ${index + 1}: ${issue.title}`);
+      ignore.addEventListener('click', () => { const keys = ignored.get(issue.node) ?? new Set<string>(); keys.add(key(issue)); ignored.set(issue.node, keys); renderStyle(); selectFocus(); status.textContent = 'Suggestion ignored for this review.'; });
+      actions.append(ignore); article.append(heading(4, issue.title), detail, preview, source, actions); styleSection.append(article);
+    });
+  };
+  const selectFocus = () => styleSection.querySelector('select')!.focus();
   const render = () => {
     const report = analyze();
     content.replaceChildren();
@@ -101,6 +150,7 @@ export function openGcQaDialog(editor: Editor, analyze: () => QaReport): void {
       });
       content.append(section);
     });
+    renderStyle(); content.append(styleSection);
     content.scrollTop = 0;
     if (runs++) status.textContent = `Checks refreshed (${runs}). ${report.errors} errors, ${report.warnings} warnings, ${report.reviews} review items.`;
   };
@@ -109,8 +159,7 @@ export function openGcQaDialog(editor: Editor, analyze: () => QaReport): void {
   dialog.addEventListener('keydown', event => {
     if (event.key === 'Escape') { event.preventDefault(); event.stopImmediatePropagation(); close(); }
     if (event.key !== 'Tab') return;
-    const hosts = Array.from(dialog.querySelectorAll<HTMLElement>('gcds-button,[tabindex="0"]'));
-    const targets = hosts.map(host => host.shadowRoot?.querySelector<HTMLElement>('button') ?? host);
+    const targets = modalTabTargets(dialog);
     let active = document.activeElement;
     while (active?.shadowRoot?.activeElement) active = active.shadowRoot.activeElement;
     const index = targets.indexOf(active as HTMLElement);

@@ -11,4 +11,8 @@ dialog.gc-qa { width: min(70rem, calc(100vw - 2rem)); }
 .gc-qa-issue { padding: var(--gcds-spacing-300); margin-bottom: var(--gcds-spacing-200); background: var(--gcds-bg-light); overflow-wrap: anywhere; }
 .gc-qa-severity { font-weight: 700; margin: 0 0 var(--gcds-spacing-150); }
 .gc-qa-status { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.gc-qa-style-actions { display: flex; flex-wrap: wrap; gap: var(--gcds-spacing-200); margin-top: var(--gcds-spacing-200); }
+.gc-qa label[for="qa-content-language"] { display: block; font-weight: 700; }
+.gc-qa select { font: inherit; padding: .5rem; max-width: 100%; margin: .5rem 0; border: 2px solid var(--gcds-border-default); }
+.gc-qa select:focus-visible, .gc-qa a:focus-visible { outline: 3px solid #0535d2; outline-offset: 3px; }
 @media (max-width: 48rem) { .gc-qa-metrics { grid-template-columns: minmax(0, 1fr); } }
