@@ -2,6 +2,8 @@
 
 Choose **Document → Review images**. The tool reviews editable `<img>` elements in document order, including images already in figures. It does not upload files: enter a relative source path or an image URL appropriate for the exported page.
 
+Authored URLs are preserved rather than converted relative to the editor's local address. For example, `/en/img/photo.jpg` retains its leading slash through editing and export. A source pointing to an actual image file is needed to display it; `/en/img/` alone is normally a folder path.
+
 The window prefills the source and alternative text. Enter a caption (default: “Add image caption”). Check **This image is decorative** only when it conveys no information or function; the result receives `alt=""`. Otherwise, enter alternative text describing the image's purpose. Captions and alternative text have different roles. An image-only link must retain an accessible name.
 
 When a text paragraph immediately precedes the image paragraph or existing figure, the window also offers its text as an editable suggested caption. Select **Use the suggested caption and remove the original paragraph above the image** to accept it. This choice starts unchecked. Applying an accepted suggestion moves the text into the caption and removes the original paragraph in the same Undo transaction. Leaving it unchecked uses the ordinary Image caption field and keeps the paragraph. Skip, Close, validation errors and Escape never remove it. Headings, intervening content, and paragraphs containing other media or form controls are not caption candidates. Changed source paragraphs require a fresh review.

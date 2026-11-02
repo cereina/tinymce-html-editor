@@ -11,6 +11,21 @@ const content = page => page.evaluate(() => window.tinymce.activeEditor.getConte
 const source = page => page.getByRole('textbox', { name: 'Image source path (required)', exact: true });
 const alt = page => page.getByRole('textbox', { name: 'Alternative text (required unless decorative)', exact: true });
 
+test('image paths retain leading slashes through apply, serialization and reopening', async ({ page }) => {
+  await open(page, '<p><img src="/en/img/original.jpg" alt="A forest"></p>');
+  await expect(source(page)).toHaveValue('/en/img/original.jpg');
+  for (const path of ['/en/img/', '/en/img/photo.jpg', 'images/photo.jpg', 'https://example.ca/en/img/photo.jpg']) {
+    await source(page).fill(path);
+    await page.getByRole('button', { name: 'Apply', exact: true }).click();
+    expect(await content(page)).toContain(`src="${path}"`);
+    await page.evaluate(() => {
+      const e = window.tinymce.activeEditor; const html = e.getContent(); e.setContent(html);
+      e.ui.registry.getAll().buttons.imagefigures.onAction();
+    });
+    await expect(source(page)).toHaveValue(path);
+  }
+});
+
 test('paragraph becomes a figure with caption first, responsive class, supplied path, and Undo', async ({ page }) => {
   await open(page, `<p id="photo" lang="fr"><img src="${pixel}" alt="A forest" class="existing" width="120"></p>`);
   await expect(source(page)).toHaveValue(pixel);

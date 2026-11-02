@@ -527,6 +527,8 @@ RawEditorOptions = {
     '#editor',
 
   promotion: false,
+  // Keep authored paths intact instead of rewriting them relative to localhost.
+  convert_urls: false,
   iframe_aria_text: 'Document HTML editor',
   license_key:
     'gpl',
