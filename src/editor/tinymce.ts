@@ -1,4 +1,5 @@
 import { openGcCleanupDialog } from '../prototype/cleanup-dialog';
+import { registerImageFigures } from './image-figures';
 import { registerAccessibleToolLabels, installEditorAccessibility } from '../accessibility/modal';
 import tinymce, {
   type Editor,
@@ -561,7 +562,7 @@ RawEditorOptions = {
         'Document tools',
 
       items:
-        'importword cleanhtml documentqa downloadlink',
+        'importword cleanhtml documentqa imagefigures downloadlink',
     },
 
     structuretools: {
@@ -626,6 +627,7 @@ RawEditorOptions = {
       editor
     ) => {
       registerAccessibleToolLabels(editor);
+      registerImageFigures(editor);
       editor.on('init', () => installEditorAccessibility(editor));
       registerWordImportButton(
         editor
