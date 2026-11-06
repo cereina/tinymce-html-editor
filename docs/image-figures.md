@@ -23,3 +23,5 @@ After the last image is reviewed, a **List of figures** window offers an optiona
 Build / Rebuild Sections preserves the generated list as a complete section or details block. It does not wrap the list heading in another section or absorb the list into the preceding generated section.
 
 Choose document start (after a leading H1 page title, if present) or document end. The window explains both locations; choose a heading level appropriate to the surrounding content. Each list link uses a caption's text and points to that caption's ID. Missing and duplicate caption IDs are repaired in the same Undo transaction. Uncaptioned images are omitted. Existing generated lists are updated in place instead of duplicated. To refresh the list after editing captions, complete Review images again. List insertion or updating can be undone independently of image conversions.
+
+At document start, a new figure list follows an existing List of tables, or the generated TOC if no table list exists. This preserves the order TOC → List of tables → List of figures.

@@ -104,3 +104,13 @@ for (const layout of ['standard', 'details']) {
     expect(await page.evaluate(() => window.tinymce.activeEditor.getBody().querySelector('[data-image-contents]').outerHTML)).toBe(before);
   });
 }
+
+test('new figure list follows an existing table list at document start', async ({ page }) => {
+  await open(page);
+  await page.evaluate(() => {
+    const b = window.tinymce.activeEditor.getBody(); const toc = b.ownerDocument.createElement('nav'); toc.setAttribute('data-generated-toc', 'true'); toc.textContent = 'On this page';
+    const tables = b.ownerDocument.createElement('section'); tables.setAttribute('data-table-contents', 'true'); tables.textContent = 'List of tables'; b.prepend(toc, tables);
+  });
+  await page.getByRole('button', { name: 'Insert list', exact: true }).click();
+  expect(await page.evaluate(() => window.tinymce.activeEditor.getBody().querySelector('[data-image-contents]').previousElementSibling.getAttribute('data-table-contents'))).toBe('true');
+});

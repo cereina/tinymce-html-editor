@@ -15,7 +15,7 @@ export function openFigureList(editor: Editor): void {
   openGcToolDialog(editor, {
     title: 'List of figures',
     body: { type: 'panel', items: [
-      { type: 'htmlpanel', html: `<p>Image review is complete. You can add a list linking to the ${count} image captions currently in the document, or choose Not now.</p><p>Choose where to add this section: document start places it before the first content, except a leading H1 page title; document end places it after the last content. A list near the beginning helps readers find images. Match the heading level to the surrounding document structure.</p>${existing ? '<p>The existing generated list will be updated at its current position; the insertion location applies only to a new list.</p>' : ''}` },
+      { type: 'htmlpanel', html: `<p>Image review is complete. You can add a list linking to the ${count} image captions currently in the document, or choose Not now.</p><p>Choose where to add this section: document start places it before the first content, except a leading H1 page title, TOC or List of tables. It follows those navigation lists when present. Document end places it after the last content. Match the heading level to the surrounding document structure.</p>${existing ? '<p>The existing generated list will be updated at its current position; the insertion location applies only to a new list.</p>' : ''}` },
       { type: 'input', name: 'title', label: 'Section heading (required)' },
       { type: 'selectbox', name: 'level', label: 'Heading level', items: [2, 3, 4, 5, 6].map(level => ({ text: `H${level}`, value: String(level) })) },
       { type: 'selectbox', name: 'layout', label: 'Section layout', items: [
@@ -59,6 +59,8 @@ export function openFigureList(editor: Editor): void {
         section.append(list);
         if (previous) previous.replaceWith(section);
         else if (position === 'end') body.append(section);
+        else if (body.querySelector('[data-table-contents="true"]')) body.querySelector('[data-table-contents="true"]')!.after(section);
+        else if (body.querySelector('nav[data-generated-toc="true"]')) body.querySelector('nav[data-generated-toc="true"]')!.after(section);
         else if (body.firstElementChild?.tagName === 'H1') body.firstElementChild.after(section);
         else body.prepend(section);
       });
