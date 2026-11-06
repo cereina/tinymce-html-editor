@@ -4433,6 +4433,9 @@ function openTableAccessibilityDialog(
       : analysis
           .suggestedHeaderRows;
 
+  const hasSavedClasses = table.hasAttribute('data-table-classes-configured') ||
+    table.classList.contains('table') || table.classList.contains('table-bordered');
+
 
   openGcToolDialog(editor, {
     title:
@@ -4469,6 +4472,10 @@ function openTableAccessibilityDialog(
           placeholder:
             'Describe the purpose of this table',
         },
+
+        { type: 'htmlpanel', html: '<h3>Table classes</h3><p>Select the classes to apply. Other existing table classes will be preserved.</p><p>On Apply, a table without an ID receives a unique ID such as table-1 or table-2. Existing table IDs are preserved.</p>' },
+        { type: 'checkbox', name: 'tableClass', label: 'table' },
+        { type: 'checkbox', name: 'tableBorderedClass', label: 'table-bordered' },
 
         {
           type:
@@ -4522,6 +4529,8 @@ function openTableAccessibilityDialog(
     },
 
     initialData: {
+      tableClass: hasSavedClasses ? table.classList.contains('table') : true,
+      tableBorderedClass: hasSavedClasses ? table.classList.contains('table-bordered') : true,
       caption:
         analysis.caption,
 
@@ -4636,6 +4645,19 @@ function openTableAccessibilityDialog(
             table,
             options
           );
+
+        result.table.classList.toggle('table', data.tableClass === true);
+        result.table.classList.toggle('table-bordered', data.tableBorderedClass === true);
+        result.table.setAttribute('data-table-classes-configured', 'true');
+        if (!result.table.id.trim()) {
+          const ids = new Set([
+            ...Array.from(editor.getBody().querySelectorAll('[id]'), node => node.id),
+            ...Array.from(result.table.querySelectorAll('[id]'), node => node.id),
+          ]);
+          let number = 1;
+          while (ids.has(`table-${number}`)) number++;
+          result.table.id = `table-${number}`;
+        }
 
 
         /*
