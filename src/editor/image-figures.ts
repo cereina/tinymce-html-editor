@@ -1,5 +1,6 @@
 import type { Editor } from 'tinymce';
 import { openGcToolDialog } from '../prototype/tool-dialog';
+import { openFigureList } from './figure-list';
 
 interface ImageSettings { src: string; caption: string; alt: string; decorative: boolean }
 
@@ -88,7 +89,7 @@ export function openImageFigures(editor: Editor): void {
   let index = 0;
   const next = () => {
     while (index < images.length && !editor.getBody().contains(images[index])) index++;
-    if (index >= images.length) return;
+    if (index >= images.length) { openFigureList(editor); return; }
     const image = images[index];
     const existing = image.closest('figure')?.querySelector('figcaption');
     const suggestion = captionAbove(image);
