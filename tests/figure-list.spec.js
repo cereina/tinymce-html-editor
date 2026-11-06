@@ -84,3 +84,23 @@ test('exported collapse list keeps H1 first, repairs duplicate IDs and opens by 
   await page.addScriptTag({ path: require.resolve('axe-core/axe.min.js') });
   expect(await page.evaluate(async () => (await window.axe.run(document, { runOnly: { type: 'tag', values: ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'] } })).violations.map(v => v.id))).toEqual([]);
 });
+
+for (const layout of ['standard', 'details']) {
+  test(`section builder preserves the ${layout} figure list without additional section wrappers`, async ({ page }) => {
+    await open(page);
+    await page.getByRole('combobox', { name: 'Section layout', exact: true }).selectOption(layout);
+    await page.getByRole('combobox', { name: 'Insertion location (new list)', exact: true }).selectOption('end');
+    await page.getByRole('button', { name: 'Insert list', exact: true }).click();
+    const before = await page.evaluate(() => window.tinymce.activeEditor.getBody().querySelector('[data-image-contents]').outerHTML);
+    for (let iteration = 0; iteration < 2; iteration++) {
+      await page.evaluate(() => { window.tinymce.activeEditor.ui.registry.getAll().buttons.sections.fetch(items => items[0].onAction()); });
+      await page.getByRole('button', { name: iteration ? 'Rebuild Sections' : 'Build Sections', exact: true }).click();
+      expect(await page.evaluate(() => {
+        const b = window.tinymce.activeEditor.getBody(); const list = b.querySelector('[data-image-contents]');
+        return { html: list.outerHTML, parent: list.parentElement === b, extra: list.querySelectorAll('section[data-heading-section]').length, normal: b.querySelectorAll('section[data-heading-section]').length, headings: [...list.querySelectorAll('h2')].map(h => h.textContent) };
+      })).toEqual({ html: before, parent: true, extra: 0, normal: 1, headings: ['List of figures'] });
+    }
+    await page.evaluate(() => window.tinymce.activeEditor.undoManager.undo());
+    expect(await page.evaluate(() => window.tinymce.activeEditor.getBody().querySelector('[data-image-contents]').outerHTML)).toBe(before);
+  });
+}

@@ -38,7 +38,7 @@ const HEADING_SELECTOR =
  *   in the document section hierarchy.
  */
 const EXCLUDED_HEADING_CONTAINERS =
-  'nav, aside, table';
+  'nav, aside, table, [data-image-contents="true"]';
 
 
 /* =========================================================
@@ -686,7 +686,8 @@ function buildSectionsInContainer(
       if (
         isWetFootnoteAside(
           node
-        )
+        ) ||
+        (node.nodeType === 1 && (node as Element).matches('[data-image-contents="true"]'))
       ) {
         stack.length =
           0;

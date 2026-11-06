@@ -20,4 +20,6 @@ The `img-responsive` class relies on the destination page's styles, such as WET/
 
 After the last image is reviewed, a **List of figures** window offers an optional section for all captioned images currently in the document. **Not now** or Escape leaves the document unchanged. Enter a section heading, select H2–H6 (H2 is the default), and choose a standard heading with a list below or an expand/collapse section with the heading inside `<summary>` and the list inside `<details>`.
 
+Build / Rebuild Sections preserves the generated list as a complete section or details block. It does not wrap the list heading in another section or absorb the list into the preceding generated section.
+
 Choose document start (after a leading H1 page title, if present) or document end. The window explains both locations; choose a heading level appropriate to the surrounding content. Each list link uses a caption's text and points to that caption's ID. Missing and duplicate caption IDs are repaired in the same Undo transaction. Uncaptioned images are omitted. Existing generated lists are updated in place instead of duplicated. To refresh the list after editing captions, complete Review images again. List insertion or updating can be undone independently of image conversions.
