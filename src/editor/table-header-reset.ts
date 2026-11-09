@@ -33,7 +33,7 @@ function removeHeaderMarkup(editor: Editor, table: HTMLTableElement): number {
       Array.from(original.attributes).forEach(attribute => cell.setAttribute(attribute.name, attribute.value));
       cell.append(...Array.from(original.childNodes)); original.replaceWith(cell);
     }
-    ['scope', 'headers', 'abbr', 'axis', 'aria-sort'].forEach(name => cell.removeAttribute(name));
+    ['scope', 'headers', 'abbr', 'axis', 'aria-sort', 'data-table-group-header'].forEach(name => cell.removeAttribute(name));
     if (['columnheader', 'rowheader'].includes(cell.getAttribute('role') || '')) cell.removeAttribute('role');
     if (cell.id) { if (referenced.has(cell.id)) kept++; else cell.removeAttribute('id'); }
   });

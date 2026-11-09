@@ -33,6 +33,54 @@ interface TableGrid {
     >;
 }
 
+const GROUP_HEADER_ATTRIBUTE = 'data-table-group-header';
+
+function groupHeaderCandidates(table: HTMLTableElement, grid = buildTableGrid(table)): LogicalCell[] {
+  return grid.cells.filter(({ cell, rowStart, colStart, colEnd }) => {
+    const row = table.rows[rowStart];
+    return rowStart > 0 && row.cells.length === 1 && cell.rowSpan === 1 &&
+      colStart === 0 && colEnd > 0 && colEnd === grid.columns - 1 &&
+      row.parentElement?.tagName !== 'THEAD' && row.parentElement?.tagName !== 'TFOOT' &&
+      !!normalizeText(cell.textContent ?? '');
+  });
+}
+
+function configureGroupHeaders(table: HTMLTableElement, topRows: number, groupRows: number[], leftHeaders: boolean): void {
+  const grid = buildTableGrid(table);
+  for (const logical of grid.cells) {
+    let { cell } = logical;
+    const wasGroup = cell.hasAttribute(GROUP_HEADER_ATTRIBUTE);
+    cell.removeAttribute(GROUP_HEADER_ATTRIBUTE);
+    if (logical.rowStart < topRows) {
+      // A merged column heading uses explicit associations without implying a colgroup element.
+      if (cell.colSpan > 1) cell.removeAttribute('scope');
+    } else if (groupRows.includes(logical.rowStart)) {
+      cell = replaceCellTag(cell, 'th');
+      cell.setAttribute(GROUP_HEADER_ATTRIBUTE, 'true');
+      // Explicit IDs define the group without changing TBODY boundaries or spans.
+      cell.removeAttribute('scope');
+      cell.removeAttribute('headers');
+    } else {
+      if (wasGroup) { cell = replaceCellTag(cell, 'td'); cell.removeAttribute('scope'); }
+      if (leftHeaders && logical.colStart === 0 && logical.colEnd < grid.columns - 1 &&
+        table.rows[logical.rowStart].parentElement?.tagName !== 'TFOOT') {
+        cell = replaceCellTag(cell, 'th');
+        cell.setAttribute('scope', 'row');
+      }
+    }
+  }
+}
+
+function inferGroupedHeaders(grid: TableGrid, data: LogicalCell, topRows: number, footer: boolean): string[] {
+  const headers = grid.cells.filter(({ cell }) => cell.tagName === 'TH');
+  const columns = headers.filter(header => header.rowStart < topRows &&
+    rangesOverlap(header.colStart, header.colEnd, data.colStart, data.colEnd));
+  const group = footer ? undefined : headers.findLast(header => header.rowStart < data.rowStart && header.cell.hasAttribute(GROUP_HEADER_ATTRIBUTE));
+  const rows = headers.filter(header => header.rowStart >= topRows && !header.cell.hasAttribute(GROUP_HEADER_ATTRIBUTE) &&
+    (header.cell.scope === 'row' || header.cell.scope === 'rowgroup') && isRowHeaderFor(header, data));
+  return [...columns, ...(group ? [group] : []), ...rows].map(header => header.cell.id);
+}
+
 
 interface StructureAnalysis {
   complexity: TableComplexity;
@@ -2050,7 +2098,8 @@ function applyInferredHeaderScopes(
 function createAccessibleTable(
   table: HTMLTableElement,
   options:
-    TableAccessibilityOptions
+    TableAccessibilityOptions,
+  groupRows?: number[]
 ): AccessibleTableResult {
   const clone =
     table.cloneNode(
@@ -2094,7 +2143,9 @@ function createAccessibleTable(
   }
 
 
-  if (
+  if (groupRows) {
+    configureGroupHeaders(clone, options.headerRowCount, groupRows, options.firstColumnHeaders);
+  } else if (
     options.firstColumnHeaders
   ) {
     applyRowHeaders(
@@ -2103,9 +2154,7 @@ function createAccessibleTable(
   }
 
 
-  applyInferredHeaderScopes(
-    clone
-  );
+  if (!groupRows) applyInferredHeaderScopes(clone);
 
 
   let paragraphWrappersRemoved =
@@ -2559,7 +2608,8 @@ function getCellKey(
 
 
 function buildHeaderAssociations(
-  table: HTMLTableElement
+  table: HTMLTableElement,
+  groupedTopRows?: number
 ): Map<
   string,
   Set<string>
@@ -2592,7 +2642,8 @@ function buildHeaderAssociations(
           logical
         ),
         new Set(
-          inferHeadersForCell(
+          groupedTopRows !== undefined ? inferGroupedHeaders(grid, logical, groupedTopRows,
+            table.rows[logical.rowStart].parentElement?.tagName === 'TFOOT') : inferHeadersForCell(
             grid,
             logical
           )
@@ -2991,7 +3042,8 @@ function openComplexTableReviewer(
   workingTable:
     HTMLTableElement,
   paragraphWrappersRemoved:
-    number
+    number,
+  groupedTopRows?: number
 ): void {
   const tableNumber =
     getTableNumber(
@@ -3000,9 +3052,7 @@ function openComplexTableReviewer(
     );
 
 
-  applyInferredHeaderScopes(
-    workingTable
-  );
+  if (groupedTopRows === undefined) applyInferredHeaderScopes(workingTable);
 
 
   ensureHeaderIds(
@@ -3026,7 +3076,7 @@ function openComplexTableReviewer(
 
   const relationships =
     buildHeaderAssociations(
-      workingTable
+      workingTable, groupedTopRows
     );
 
 
@@ -4435,6 +4485,8 @@ function openTableAccessibilityDialog(
 
   const hasSavedClasses = table.hasAttribute('data-table-classes-configured') ||
     table.classList.contains('table') || table.classList.contains('table-bordered');
+  const groupCandidates = groupHeaderCandidates(table);
+  const hasSavedGroups = Array.from(table.rows).some(row => Array.from(row.cells).some(cell => cell.hasAttribute(GROUP_HEADER_ATTRIBUTE)));
 
 
   openGcToolDialog(editor, {
@@ -4504,6 +4556,12 @@ function openTableAccessibilityDialog(
             'Use the first column of data rows as row headers',
         },
 
+        ...(groupCandidates.length ? [
+          { type: 'htmlpanel' as const, html: '<h3>Group headers in the table body</h3><p>Select the merged rows that label the data below them. Top column headings still apply. Review the proposed links before applying.</p>' },
+          ...groupCandidates.map(({ cell, rowStart }) => ({ type: 'checkbox' as const,
+            name: `groupRow${rowStart}`, label: `Row ${rowStart + 1}: ${normalizeText(cell.textContent ?? '').slice(0, 120)}` })),
+        ] : []),
+
         {
           type:
             'checkbox',
@@ -4529,6 +4587,7 @@ function openTableAccessibilityDialog(
     },
 
     initialData: {
+      ...Object.fromEntries(groupCandidates.map(({ cell, rowStart }) => [`groupRow${rowStart}`, cell.hasAttribute(GROUP_HEADER_ATTRIBUTE)])),
       tableClass: hasSavedClasses ? table.classList.contains('table') : true,
       tableBorderedClass: hasSavedClasses ? table.classList.contains('table-bordered') : true,
       caption:
@@ -4565,8 +4624,7 @@ function openTableAccessibilityDialog(
           'submit',
 
         text:
-          analysis.complexity ===
-          'complex'
+          analysis.complexity === 'complex' || hasSavedGroups
             ? 'Review relationships'
             : 'Apply accessibility',
 
@@ -4639,11 +4697,25 @@ function openTableAccessibilityDialog(
               true,
           };
 
+        const groupRows = groupCandidates.filter(({ rowStart }) => data[`groupRow${rowStart}`] === true).map(({ rowStart }) => rowStart);
+        const grouped = groupRows.length > 0 || hasSavedGroups;
+        if (grouped) {
+          const grid = buildTableGrid(table);
+          const eligible = new Set(groupHeaderCandidates(table, grid).map(cell => cell.rowStart));
+          let error = '';
+          if (!headerRowCount || table.rows[0].cells.length < 2) error = 'Choose top column header rows. The first row must contain at least two cells.';
+          else if (groupRows.some(row => row < headerRowCount || !eligible.has(row))) error = 'Select only full-width group rows below the top column headers.';
+          else if ((table.tHead?.rows.length ?? 0) > headerRowCount) error = 'Include every existing THEAD row in the top column headers.';
+          else if (grid.cells.some(cell => cell.cell.rowSpan === 0 || [headerRowCount, ...groupRows].some(boundary => cell.rowStart < boundary && cell.rowEnd >= boundary))) error = 'A vertical merge crosses a header boundary or spans to the end of its row group. Adjust the selected rows or use manual relationship review.';
+          if (error) { editor.notificationManager.open({ type: 'error', text: error }); return; }
+        }
+
 
         const result =
           createAccessibleTable(
             table,
-            options
+            options,
+            grouped ? groupRows : undefined
           );
 
         result.table.classList.toggle('table', data.tableClass === true);
@@ -4673,9 +4745,7 @@ function openTableAccessibilityDialog(
 
 
         if (
-          finalStructure
-            .complexity ===
-          'complex'
+          grouped || finalStructure.complexity === 'complex'
         ) {
           api.close();
 
@@ -4685,7 +4755,8 @@ function openTableAccessibilityDialog(
             table,
             result.table,
             result
-              .paragraphWrappersRemoved
+              .paragraphWrappersRemoved,
+            grouped ? headerRowCount : undefined
           );
 
 
